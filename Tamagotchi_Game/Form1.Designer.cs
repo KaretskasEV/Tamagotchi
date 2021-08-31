@@ -1,7 +1,7 @@
 ﻿
 namespace Tamagotchi_Game
 {
-    partial class Form1
+    partial class Form_Egg
     {
         /// <summary>
         /// Required designer variable.
@@ -31,13 +31,19 @@ namespace Tamagotchi_Game
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // Form_Egg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(353, 497);
-            this.Name = "Form1";
+            this.BackColor = System.Drawing.SystemColors.InfoText;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(400, 600);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "Form_Egg";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form_Egg_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_Egg_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_Egg_MouseMove);
             this.ResumeLayout(false);
 
         }
