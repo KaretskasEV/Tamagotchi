@@ -16,7 +16,7 @@ namespace Tamagotchi_Game
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_Egg());
+            Application.Run(new form_Egg());
         }
     }
 }
