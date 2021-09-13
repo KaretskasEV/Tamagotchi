@@ -53,11 +53,11 @@ namespace Tamagotchi_Game
             GraphicsPath buttonPath = new GraphicsPath();
             buttonPath.AddEllipse(2, 1, 30, 27);
             Region buttonRegion = new Region(buttonPath);
-            this.buttonSelect.Region = buttonRegion;
-            this.buttonDecide.Region = buttonRegion;
-            this.buttonCancel.Region = buttonRegion;
-            this.buttonReset.Region = buttonRegion;
-            this.buttonExit.Region = buttonRegion;
+            //this.buttonSelect.Region = buttonRegion;
+            //this.buttonDecide.Region = buttonRegion;
+            //this.buttonCancel.Region = buttonRegion;
+            //this.buttonReset.Region = buttonRegion;
+            //this.buttonExit.Region = buttonRegion;
         }
     }
 }
