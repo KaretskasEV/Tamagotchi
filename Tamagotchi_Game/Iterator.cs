@@ -1,51 +1,46 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Tamagotchi_Game
 {
-    sealed class Iterator : IEnumerator
+    sealed class Iterator<TTypeVariable> : IEnumerator
     {
-        private string[] arrayForIterator;
-        private int item;
+        private readonly TTypeVariable[] _arrayForIterator;
+        private int _item;
 
-        public Iterator(string[] arrayForIterator)
+        public Iterator(TTypeVariable[] arrayForIterator)
         {
             if (arrayForIterator == null)
             {
-                MessageBox.Show(@"arrayForIterator is null", @"Error");
+                MessageBox.Show(@"_arrayForIterator is null", @"Error");
                 throw new NullReferenceException();
             }
 
-            this.arrayForIterator = arrayForIterator;
-            item = -1;
+            _arrayForIterator = arrayForIterator;
+            _item = -1;
         }
 
         public void Reset()
         {
-            item = -1;
+            _item = -1;
         }
 
         public bool MoveNext()
         {
-            item++;
-            return (item < arrayForIterator.Length);
+            _item++;
+            return (_item < _arrayForIterator.Length);
         }
 
         public bool MovePrevious()
         {
-            if (item == -1 | item == 0)
+            if (_item == -1)
             {
                 return false;
             }
 
-            item--;
-            return (item >= 0);
+            _item--;
+            return (_item >= 0);
         }
 
         object IEnumerator.Current
@@ -53,9 +48,19 @@ namespace Tamagotchi_Game
             get => Current;
         }
 
-        public string Current
+        public TTypeVariable Current
         {
-            get => arrayForIterator[item];
+            get
+            {
+                try
+                {
+                    return _arrayForIterator[_item]; 
+                }
+                catch(InvalidOperationException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
         }
     }
 }

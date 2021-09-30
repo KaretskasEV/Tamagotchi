@@ -1,7 +1,7 @@
 ﻿
 namespace Tamagotchi_Game
 {
-    partial class form_Egg
+    partial class FormEgg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Tamagotchi_Game
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form_Egg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEgg));
             this.pictureBoxScreen = new System.Windows.Forms.PictureBox();
             this.pictureBoxEat = new System.Windows.Forms.PictureBox();
             this.pictureBoxLight = new System.Windows.Forms.PictureBox();
@@ -39,7 +39,7 @@ namespace Tamagotchi_Game
             this.pictureBoxInformation = new System.Windows.Forms.PictureBox();
             this.pictureBoxEducation = new System.Windows.Forms.PictureBox();
             this.pictureBoxHappen = new System.Windows.Forms.PictureBox();
-            this.pictureBoxButtonSelect = new System.Windows.Forms.PictureBox();
+            this.PictureBoxButtonSelect = new System.Windows.Forms.PictureBox();
             this.pictureBoxButtonDecide = new System.Windows.Forms.PictureBox();
             this.pictureBoxButtonCancel = new System.Windows.Forms.PictureBox();
             this.pictureBoxButtonReset = new System.Windows.Forms.PictureBox();
@@ -54,7 +54,7 @@ namespace Tamagotchi_Game
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxInformation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEducation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHappen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonSelect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxButtonSelect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonDecide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonCancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonReset)).BeginInit();
@@ -143,16 +143,16 @@ namespace Tamagotchi_Game
             this.pictureBoxHappen.TabIndex = 8;
             this.pictureBoxHappen.TabStop = false;
             // 
-            // pictureBoxButtonSelect
+            // PictureBoxButtonSelect
             // 
-            this.pictureBoxButtonSelect.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxButtonSelect.BackgroundImage")));
-            this.pictureBoxButtonSelect.Location = new System.Drawing.Point(75, 370);
-            this.pictureBoxButtonSelect.Name = "pictureBoxButtonSelect";
-            this.pictureBoxButtonSelect.Size = new System.Drawing.Size(27, 27);
-            this.pictureBoxButtonSelect.TabIndex = 9;
-            this.pictureBoxButtonSelect.TabStop = false;
-            this.pictureBoxButtonSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonSelect_MouseDown);
-            this.pictureBoxButtonSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonSelect_MouseUp);
+            this.PictureBoxButtonSelect.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PictureBoxButtonSelect.BackgroundImage")));
+            this.PictureBoxButtonSelect.Location = new System.Drawing.Point(75, 370);
+            this.PictureBoxButtonSelect.Name = "PictureBoxButtonSelect";
+            this.PictureBoxButtonSelect.Size = new System.Drawing.Size(27, 27);
+            this.PictureBoxButtonSelect.TabIndex = 9;
+            this.PictureBoxButtonSelect.TabStop = false;
+            this.PictureBoxButtonSelect.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonSelect_MouseDown);
+            this.PictureBoxButtonSelect.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonSelect_MouseUp);
             // 
             // pictureBoxButtonDecide
             // 
@@ -162,8 +162,8 @@ namespace Tamagotchi_Game
             this.pictureBoxButtonDecide.Size = new System.Drawing.Size(27, 27);
             this.pictureBoxButtonDecide.TabIndex = 10;
             this.pictureBoxButtonDecide.TabStop = false;
-            this.pictureBoxButtonDecide.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonDecide_MouseDown);
-            this.pictureBoxButtonDecide.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonDecide_MouseUp);
+            this.pictureBoxButtonDecide.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonDecide_MouseDown);
+            this.pictureBoxButtonDecide.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonDecide_MouseUp);
             // 
             // pictureBoxButtonCancel
             // 
@@ -174,8 +174,8 @@ namespace Tamagotchi_Game
             this.pictureBoxButtonCancel.Size = new System.Drawing.Size(27, 27);
             this.pictureBoxButtonCancel.TabIndex = 11;
             this.pictureBoxButtonCancel.TabStop = false;
-            this.pictureBoxButtonCancel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonCancel_MouseDown);
-            this.pictureBoxButtonCancel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonCancel_MouseUp);
+            this.pictureBoxButtonCancel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonCancel_MouseDown);
+            this.pictureBoxButtonCancel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonCancel_MouseUp);
             // 
             // pictureBoxButtonReset
             // 
@@ -186,8 +186,8 @@ namespace Tamagotchi_Game
             this.pictureBoxButtonReset.Size = new System.Drawing.Size(27, 27);
             this.pictureBoxButtonReset.TabIndex = 12;
             this.pictureBoxButtonReset.TabStop = false;
-            this.pictureBoxButtonReset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonReset_MouseDown);
-            this.pictureBoxButtonReset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonReset_MouseUp);
+            this.pictureBoxButtonReset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonReset_MouseDown);
+            this.pictureBoxButtonReset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonReset_MouseUp);
             // 
             // pictureBoxButtonExit
             // 
@@ -198,8 +198,8 @@ namespace Tamagotchi_Game
             this.pictureBoxButtonExit.Size = new System.Drawing.Size(27, 27);
             this.pictureBoxButtonExit.TabIndex = 13;
             this.pictureBoxButtonExit.TabStop = false;
-            this.pictureBoxButtonExit.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonExit_MouseDown);
-            this.pictureBoxButtonExit.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxButtonExit_MouseUp);
+            this.pictureBoxButtonExit.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonExit_MouseDown);
+            this.pictureBoxButtonExit.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxButtonExit_MouseUp);
             // 
             // label1
             // 
@@ -211,7 +211,7 @@ namespace Tamagotchi_Game
             this.label1.TabIndex = 14;
             this.label1.Text = "65656+";
             // 
-            // form_Egg
+            // FormEgg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -223,7 +223,7 @@ namespace Tamagotchi_Game
             this.Controls.Add(this.pictureBoxButtonReset);
             this.Controls.Add(this.pictureBoxButtonCancel);
             this.Controls.Add(this.pictureBoxButtonDecide);
-            this.Controls.Add(this.pictureBoxButtonSelect);
+            this.Controls.Add(this.PictureBoxButtonSelect);
             this.Controls.Add(this.pictureBoxHappen);
             this.Controls.Add(this.pictureBoxEducation);
             this.Controls.Add(this.pictureBoxInformation);
@@ -234,7 +234,7 @@ namespace Tamagotchi_Game
             this.Controls.Add(this.pictureBoxEat);
             this.Controls.Add(this.pictureBoxScreen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "form_Egg";
+            this.Name = "FormEgg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.Form_Egg_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_Egg_MouseDown);
@@ -248,7 +248,7 @@ namespace Tamagotchi_Game
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxInformation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEducation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHappen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonSelect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxButtonSelect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonDecide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonCancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxButtonReset)).EndInit();
@@ -269,7 +269,7 @@ namespace Tamagotchi_Game
         private System.Windows.Forms.PictureBox pictureBoxInformation;
         private System.Windows.Forms.PictureBox pictureBoxEducation;
         private System.Windows.Forms.PictureBox pictureBoxHappen;
-        private System.Windows.Forms.PictureBox pictureBoxButtonSelect;
+        private System.Windows.Forms.PictureBox PictureBoxButtonSelect;
         private System.Windows.Forms.PictureBox pictureBoxButtonDecide;
         private System.Windows.Forms.PictureBox pictureBoxButtonCancel;
         private System.Windows.Forms.PictureBox pictureBoxButtonReset;

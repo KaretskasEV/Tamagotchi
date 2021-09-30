@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Tamagotchi_Game
@@ -16,7 +13,7 @@ namespace Tamagotchi_Game
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new form_Egg());
+            Application.Run(new FormEgg());
         }
     }
 }
