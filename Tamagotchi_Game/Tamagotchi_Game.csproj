@@ -52,12 +52,13 @@
     <Compile Include="FormEgg.Designer.cs">
       <DependentUpon>FormEgg.cs</DependentUpon>
     </Compile>
-    <Compile Include="DownloadImage.cs" />
+    <Compile Include="WorkWithImage.cs" />
     <Compile Include="Iterator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormEgg.resx">
       <DependentUpon>FormEgg.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

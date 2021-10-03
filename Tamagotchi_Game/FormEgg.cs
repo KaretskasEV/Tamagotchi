@@ -9,7 +9,7 @@ namespace Tamagotchi_Game
     {
         private int _mouseX;
         private int _mouseY;
-        private readonly DownloadImage _changeImage;
+        private readonly WorkWithImage _changeImage;
         private readonly PictureBox[] _arrayPictureBoxIcons  = new PictureBox[7];
 
         public FormEgg()
@@ -24,7 +24,7 @@ namespace Tamagotchi_Game
             _arrayPictureBoxIcons[5] = pictureBoxInformation;
             _arrayPictureBoxIcons[6] = pictureBoxEducation;
 
-            _changeImage = new DownloadImage(_arrayPictureBoxIcons);
+            _changeImage = new WorkWithImage(_arrayPictureBoxIcons);
         }
 
         private void Form_Egg_Load(object sender, EventArgs e)
@@ -52,69 +52,54 @@ namespace Tamagotchi_Game
 
         private void PictureBoxButtonSelect_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _changeImage.ChangeImageButton(PictureBoxButtonSelect);
-            }
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonSelect_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangeImageButton(PictureBoxButtonSelect);
-
-            _changeImage.ChangeImageIcon();
+            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.NextIcon();
         }
 
         private void PictureBoxButtonDecide_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _changeImage.ChangeImageButton(pictureBoxButtonDecide);
-            }
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonDecide_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangeImageButton(pictureBoxButtonDecide);
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonCancel_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _changeImage.ChangeImageButton(pictureBoxButtonCancel);
-            }
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonCancel_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangeImageButton(pictureBoxButtonCancel);
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonReset_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _changeImage.ChangeImageButton(pictureBoxButtonReset);
-            }
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonReset_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangeImageButton(pictureBoxButtonReset);
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonExit_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _changeImage.ChangeImageButton(pictureBoxButtonExit);
-            }
+            _changeImage.ChangePictureBox(sender, e.Button);
         }
 
         private void PictureBoxButtonExit_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangeImageButton(pictureBoxButtonExit);
+            _changeImage.ChangePictureBox(sender, e.Button);
+
             this.Close();
         }
     }

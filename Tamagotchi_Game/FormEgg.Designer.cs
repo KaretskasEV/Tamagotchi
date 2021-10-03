@@ -45,6 +45,7 @@ namespace Tamagotchi_Game
             this.pictureBoxButtonReset = new System.Windows.Forms.PictureBox();
             this.pictureBoxButtonExit = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxScreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLight)).BeginInit();
@@ -211,6 +212,15 @@ namespace Tamagotchi_Game
             this.label1.TabIndex = 14;
             this.label1.Text = "65656+";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(182, 62);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(61, 24);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // FormEgg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,6 +228,7 @@ namespace Tamagotchi_Game
             this.BackColor = System.Drawing.SystemColors.ControlText;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(400, 600);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBoxButtonExit);
             this.Controls.Add(this.pictureBoxButtonReset);
@@ -275,6 +286,7 @@ namespace Tamagotchi_Game
         private System.Windows.Forms.PictureBox pictureBoxButtonReset;
         private System.Windows.Forms.PictureBox pictureBoxButtonExit;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
     }
 }
 
