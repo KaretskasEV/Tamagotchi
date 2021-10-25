@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace TamagotchiGame
 {
-    sealed class Iterator<TTypeVariable> : IEnumerator
+    sealed public class Iterator<TTypeVariable> : IEnumerator
     {
         private readonly TTypeVariable[] _arrayForIterator;
         private int _item;
@@ -34,11 +34,6 @@ namespace TamagotchiGame
 
         public bool MovePrevious()
         {
-            if (_item == -1)
-            {
-                return false;
-            }
-
             _item--;
             return (_item >= 0);
         }
@@ -56,9 +51,9 @@ namespace TamagotchiGame
                 {
                     return _arrayForIterator[_item]; 
                 }
-                catch(InvalidOperationException)
+                catch(IndexOutOfRangeException)
                 {
-                    throw new InvalidOperationException();
+                    throw new IndexOutOfRangeException();
                 }
             }
         }
