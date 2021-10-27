@@ -1,17 +1,16 @@
 using System;
-//using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using TamagotchiGame;
 
 namespace TestsTamagotchiGame
 {
-    public class IteratorTests
+    sealed class IteratorTests
     {
         [Test]
         public void Reset_Throw_IndexOutOfRangeException_InCurrent()
         {
             int[] arrayInts = {0, 1, 2};
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             iteratorArrayInts.Reset();
 
@@ -23,7 +22,7 @@ namespace TestsTamagotchiGame
         {
             bool result;
             int[] arrayInts = {0, 1, 2};
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
             
             result = iteratorArrayInts.MoveNext();
             
@@ -35,7 +34,7 @@ namespace TestsTamagotchiGame
         {
             bool result = false;
             int[] arrayInts = { 0, 1, 2 };
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             for (int item = 0; item <= arrayInts.Length; item++)
             {
@@ -50,7 +49,7 @@ namespace TestsTamagotchiGame
         {
             bool result;
             int[] arrayInts = { 0, 1, 2 };
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             iteratorArrayInts.MoveNext();
             iteratorArrayInts.MoveNext();
@@ -64,7 +63,7 @@ namespace TestsTamagotchiGame
         {
             bool result;
             int[] arrayInts = { 0, 1, 2 };
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             result = iteratorArrayInts.MovePrevious();
 
@@ -75,7 +74,7 @@ namespace TestsTamagotchiGame
         public void Current_return_0()
         {
             int[] arrayInts = {0, 1, 2};
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             iteratorArrayInts.MoveNext();
 
@@ -86,7 +85,7 @@ namespace TestsTamagotchiGame
         public void Current_throw_IndexOutOfRangeException()
         {
             int[] arrayInts = { 0, 1, 2 };
-            Iterator<int> iteratorArrayInts = new Iterator<int>(arrayInts);
+            var iteratorArrayInts = new Iterator<int>(arrayInts);
 
             Assert.Throws(typeof(IndexOutOfRangeException), () => { int current = iteratorArrayInts.Current; });
         }

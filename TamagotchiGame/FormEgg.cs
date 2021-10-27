@@ -29,10 +29,10 @@ namespace TamagotchiGame
 
         private void Form_Egg_Load(object sender, EventArgs e)
         {
-            GraphicsPath formPath = new GraphicsPath();
+            var formPath = new GraphicsPath();
             formPath.AddArc(0, 100, this.Width, this.Height-200, (float)0.0, (float)180.0);
             formPath.AddArc(0, 0, this.Width, this.Height, (float)0.0, (float)-180.0);
-            Region formRegion = new Region(formPath);
+            var formRegion = new Region(formPath);
             this.Region = formRegion;
         }
 
@@ -52,53 +52,53 @@ namespace TamagotchiGame
 
         private void PictureBoxButtonSelect_MouseDown(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonSelect_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
             _changeImage.NextIcon();
         }
 
         private void PictureBoxButtonDecide_MouseDown(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonDecide_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonCancel_MouseDown(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonCancel_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonReset_MouseDown(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonReset_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonExit_MouseDown(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
         }
 
         private void PictureBoxButtonExit_MouseUp(object sender, MouseEventArgs e)
         {
-            _changeImage.ChangePictureBox(sender, e.Button);
+            _changeImage.ChangePictureBox(sender, e.Button, WorkWithImage.SelectIterator.ForButton);
 
             this.Close();
         }
