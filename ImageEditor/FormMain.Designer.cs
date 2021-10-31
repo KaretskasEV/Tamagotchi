@@ -35,11 +35,11 @@ namespace ImageEditor
             this.buttonSaveImage = new System.Windows.Forms.Button();
             this.buttonLoadImage = new System.Windows.Forms.Button();
             this.buttonUndo = new System.Windows.Forms.Button();
-            this.numericUpDownX = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownY = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownColumns = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownRows = new System.Windows.Forms.NumericUpDown();
             this.groupBoxCreatePixelsTable = new System.Windows.Forms.GroupBox();
-            this.labelY = new System.Windows.Forms.Label();
             this.labelX = new System.Windows.Forms.Label();
+            this.labelY = new System.Windows.Forms.Label();
             this.groupBoxEditImage = new System.Windows.Forms.GroupBox();
             this.buttonRedo = new System.Windows.Forms.Button();
             this.buttonClear = new System.Windows.Forms.Button();
@@ -48,8 +48,8 @@ namespace ImageEditor
             this.groupBoxFile = new System.Windows.Forms.GroupBox();
             this.groupBoxImage = new System.Windows.Forms.GroupBox();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).BeginInit();
             this.groupBoxCreatePixelsTable.SuspendLayout();
             this.groupBoxEditImage.SuspendLayout();
             this.groupBoxImageInformation.SuspendLayout();
@@ -101,6 +101,7 @@ namespace ImageEditor
             this.buttonLoadImage.TabIndex = 3;
             this.buttonLoadImage.Text = "Load Image";
             this.buttonLoadImage.UseVisualStyleBackColor = true;
+            this.buttonLoadImage.Click += new System.EventHandler(this.buttonLoadImage_Click);
             // 
             // buttonUndo
             // 
@@ -112,59 +113,63 @@ namespace ImageEditor
             this.buttonUndo.Text = "Undo";
             this.buttonUndo.UseVisualStyleBackColor = true;
             // 
-            // numericUpDownX
+            // numericUpDownColumns
             // 
-            this.numericUpDownX.Location = new System.Drawing.Point(31, 34);
-            this.numericUpDownX.Margin = new System.Windows.Forms.Padding(0);
-            this.numericUpDownX.Maximum = new decimal(new int[] {
+            this.numericUpDownColumns.Location = new System.Drawing.Point(70, 18);
+            this.numericUpDownColumns.Margin = new System.Windows.Forms.Padding(0);
+            this.numericUpDownColumns.Maximum = new decimal(new int[] {
             35,
             0,
             0,
             0});
-            this.numericUpDownX.Minimum = new decimal(new int[] {
+            this.numericUpDownColumns.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDownX.Name = "numericUpDownX";
-            this.numericUpDownX.Size = new System.Drawing.Size(37, 23);
-            this.numericUpDownX.TabIndex = 5;
-            this.numericUpDownX.Value = new decimal(new int[] {
+            this.numericUpDownColumns.Name = "numericUpDownColumns";
+            this.numericUpDownColumns.Size = new System.Drawing.Size(76, 23);
+            this.numericUpDownColumns.TabIndex = 5;
+            this.numericUpDownColumns.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDownColumns.Value = new decimal(new int[] {
             35,
             0,
             0,
             0});
+            this.numericUpDownColumns.ValueChanged += new System.EventHandler(this.numericUpDownColumns_ValueChanged);
             // 
-            // numericUpDownY
+            // numericUpDownRows
             // 
-            this.numericUpDownY.Location = new System.Drawing.Point(100, 34);
-            this.numericUpDownY.Margin = new System.Windows.Forms.Padding(0);
-            this.numericUpDownY.Maximum = new decimal(new int[] {
+            this.numericUpDownRows.Location = new System.Drawing.Point(70, 44);
+            this.numericUpDownRows.Margin = new System.Windows.Forms.Padding(0);
+            this.numericUpDownRows.Maximum = new decimal(new int[] {
             17,
             0,
             0,
             0});
-            this.numericUpDownY.Minimum = new decimal(new int[] {
+            this.numericUpDownRows.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDownY.Name = "numericUpDownY";
-            this.numericUpDownY.Size = new System.Drawing.Size(37, 23);
-            this.numericUpDownY.TabIndex = 6;
-            this.numericUpDownY.Value = new decimal(new int[] {
+            this.numericUpDownRows.Name = "numericUpDownRows";
+            this.numericUpDownRows.Size = new System.Drawing.Size(76, 23);
+            this.numericUpDownRows.TabIndex = 6;
+            this.numericUpDownRows.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDownRows.Value = new decimal(new int[] {
             17,
             0,
             0,
             0});
+            this.numericUpDownRows.ValueChanged += new System.EventHandler(this.numericUpDownRows_ValueChanged);
             // 
             // groupBoxCreatePixelsTable
             // 
             this.groupBoxCreatePixelsTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.groupBoxCreatePixelsTable.Controls.Add(this.labelY);
-            this.groupBoxCreatePixelsTable.Controls.Add(this.numericUpDownY);
+            this.groupBoxCreatePixelsTable.Controls.Add(this.numericUpDownRows);
             this.groupBoxCreatePixelsTable.Controls.Add(this.labelX);
-            this.groupBoxCreatePixelsTable.Controls.Add(this.numericUpDownX);
+            this.groupBoxCreatePixelsTable.Controls.Add(this.labelY);
+            this.groupBoxCreatePixelsTable.Controls.Add(this.numericUpDownColumns);
             this.groupBoxCreatePixelsTable.Controls.Add(this.buttonCreateNewImage);
             this.groupBoxCreatePixelsTable.Location = new System.Drawing.Point(13, 413);
             this.groupBoxCreatePixelsTable.Margin = new System.Windows.Forms.Padding(4);
@@ -175,32 +180,32 @@ namespace ImageEditor
             this.groupBoxCreatePixelsTable.TabStop = false;
             this.groupBoxCreatePixelsTable.Text = "Create pixels table:";
             // 
-            // labelY
-            // 
-            this.labelY.AutoSize = true;
-            this.labelY.Location = new System.Drawing.Point(68, 36);
-            this.labelY.Margin = new System.Windows.Forms.Padding(0);
-            this.labelY.Name = "labelY";
-            this.labelY.Size = new System.Drawing.Size(32, 16);
-            this.labelY.TabIndex = 9;
-            this.labelY.Text = " - Y:";
-            // 
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(12, 36);
+            this.labelX.Location = new System.Drawing.Point(4, 20);
             this.labelX.Margin = new System.Windows.Forms.Padding(0);
             this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(19, 16);
+            this.labelX.Size = new System.Drawing.Size(66, 16);
             this.labelX.TabIndex = 8;
-            this.labelX.Text = "X:";
+            this.labelX.Text = "Columns:";
+            // 
+            // labelY
+            // 
+            this.labelY.AutoSize = true;
+            this.labelY.Location = new System.Drawing.Point(25, 46);
+            this.labelY.Margin = new System.Windows.Forms.Padding(0);
+            this.labelY.Name = "labelY";
+            this.labelY.Size = new System.Drawing.Size(45, 16);
+            this.labelY.TabIndex = 9;
+            this.labelY.Text = "Rows:";
             // 
             // groupBoxEditImage
             // 
             this.groupBoxEditImage.Controls.Add(this.buttonRedo);
             this.groupBoxEditImage.Controls.Add(this.buttonClear);
             this.groupBoxEditImage.Controls.Add(this.buttonUndo);
-            this.groupBoxEditImage.Location = new System.Drawing.Point(173, 413);
+            this.groupBoxEditImage.Location = new System.Drawing.Point(174, 413);
             this.groupBoxEditImage.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxEditImage.Name = "groupBoxEditImage";
             this.groupBoxEditImage.Size = new System.Drawing.Size(150, 111);
@@ -229,9 +234,9 @@ namespace ImageEditor
             // groupBoxImageInformation
             // 
             this.groupBoxImageInformation.Controls.Add(this.textBoxImageInformation);
-            this.groupBoxImageInformation.Location = new System.Drawing.Point(329, 413);
+            this.groupBoxImageInformation.Location = new System.Drawing.Point(331, 413);
             this.groupBoxImageInformation.Name = "groupBoxImageInformation";
-            this.groupBoxImageInformation.Size = new System.Drawing.Size(285, 111);
+            this.groupBoxImageInformation.Size = new System.Drawing.Size(283, 111);
             this.groupBoxImageInformation.TabIndex = 9;
             this.groupBoxImageInformation.TabStop = false;
             this.groupBoxImageInformation.Text = "Image information";
@@ -266,15 +271,19 @@ namespace ImageEditor
             this.groupBoxImage.Size = new System.Drawing.Size(760, 394);
             this.groupBoxImage.TabIndex = 11;
             this.groupBoxImage.TabStop = false;
-            this.groupBoxImage.Text = "Image";
+            this.groupBoxImage.Text = "ImageJopa";
             // 
             // pictureBoxImage
             // 
-            this.pictureBoxImage.Location = new System.Drawing.Point(11, 22);
+            this.pictureBoxImage.BackColor = System.Drawing.Color.White;
+            this.pictureBoxImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxImage.Location = new System.Drawing.Point(10, 21);
             this.pictureBoxImage.Name = "pictureBoxImage";
-            this.pictureBoxImage.Size = new System.Drawing.Size(738, 360);
+            this.pictureBoxImage.Size = new System.Drawing.Size(741, 363);
             this.pictureBoxImage.TabIndex = 0;
             this.pictureBoxImage.TabStop = false;
+            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
+            this.pictureBoxImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseMove);
             // 
             // FormMain
             // 
@@ -293,8 +302,8 @@ namespace ImageEditor
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Image Editor";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).EndInit();
             this.groupBoxCreatePixelsTable.ResumeLayout(false);
             this.groupBoxCreatePixelsTable.PerformLayout();
             this.groupBoxEditImage.ResumeLayout(false);
@@ -314,8 +323,8 @@ namespace ImageEditor
         private System.Windows.Forms.Button buttonSaveImage;
         private System.Windows.Forms.Button buttonLoadImage;
         private System.Windows.Forms.Button buttonUndo;
-        private System.Windows.Forms.NumericUpDown numericUpDownX;
-        private System.Windows.Forms.NumericUpDown numericUpDownY;
+        private System.Windows.Forms.NumericUpDown numericUpDownColumns;
+        private System.Windows.Forms.NumericUpDown numericUpDownRows;
         private System.Windows.Forms.GroupBox groupBoxCreatePixelsTable;
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.Label labelY;
