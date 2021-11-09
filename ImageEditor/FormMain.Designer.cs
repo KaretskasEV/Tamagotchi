@@ -29,7 +29,7 @@ namespace ImageEditor
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonCreateNewImage = new System.Windows.Forms.Button();
+            this.buttonCreateNewGrid = new System.Windows.Forms.Button();
             this.openFileDialogFile = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogFile = new System.Windows.Forms.SaveFileDialog();
             this.buttonSaveImage = new System.Windows.Forms.Button();
@@ -45,28 +45,30 @@ namespace ImageEditor
             this.buttonClear = new System.Windows.Forms.Button();
             this.groupBoxImageInformation = new System.Windows.Forms.GroupBox();
             this.textBoxImageInformation = new System.Windows.Forms.TextBox();
-            this.groupBoxFile = new System.Windows.Forms.GroupBox();
-            this.groupBoxImage = new System.Windows.Forms.GroupBox();
+            this.groupBoxForFile = new System.Windows.Forms.GroupBox();
+            this.groupBoxForImage = new System.Windows.Forms.GroupBox();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).BeginInit();
             this.groupBoxCreatePixelsTable.SuspendLayout();
             this.groupBoxEditImage.SuspendLayout();
             this.groupBoxImageInformation.SuspendLayout();
-            this.groupBoxFile.SuspendLayout();
-            this.groupBoxImage.SuspendLayout();
+            this.groupBoxForFile.SuspendLayout();
+            this.groupBoxForImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // buttonCreateNewImage
+            // buttonCreateNewGrid
             // 
-            this.buttonCreateNewImage.Location = new System.Drawing.Point(8, 71);
-            this.buttonCreateNewImage.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonCreateNewImage.Name = "buttonCreateNewImage";
-            this.buttonCreateNewImage.Size = new System.Drawing.Size(138, 33);
-            this.buttonCreateNewImage.TabIndex = 1;
-            this.buttonCreateNewImage.Text = "Create new Image";
-            this.buttonCreateNewImage.UseVisualStyleBackColor = true;
+            this.buttonCreateNewGrid.Location = new System.Drawing.Point(8, 71);
+            this.buttonCreateNewGrid.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCreateNewGrid.Name = "buttonCreateNewGrid";
+            this.buttonCreateNewGrid.Size = new System.Drawing.Size(138, 33);
+            this.buttonCreateNewGrid.TabIndex = 1;
+            this.buttonCreateNewGrid.Text = "Create new grid";
+            this.buttonCreateNewGrid.UseVisualStyleBackColor = true;
+            this.buttonCreateNewGrid.Click += new System.EventHandler(this.ButtonCreateNewImage_Click);
+            this.buttonCreateNewGrid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonCreateNewImage_MouseMove);
             // 
             // openFileDialogFile
             // 
@@ -91,6 +93,7 @@ namespace ImageEditor
             this.buttonSaveImage.TabIndex = 2;
             this.buttonSaveImage.Text = "Save Image";
             this.buttonSaveImage.UseVisualStyleBackColor = true;
+            this.buttonSaveImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonSaveImage_MouseMove);
             // 
             // buttonLoadImage
             // 
@@ -101,10 +104,11 @@ namespace ImageEditor
             this.buttonLoadImage.TabIndex = 3;
             this.buttonLoadImage.Text = "Load Image";
             this.buttonLoadImage.UseVisualStyleBackColor = true;
-            this.buttonLoadImage.Click += new System.EventHandler(this.buttonLoadImage_Click);
+            this.buttonLoadImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonLoadImage_MouseMove);
             // 
             // buttonUndo
             // 
+            this.buttonUndo.Enabled = false;
             this.buttonUndo.Location = new System.Drawing.Point(7, 27);
             this.buttonUndo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonUndo.Name = "buttonUndo";
@@ -112,6 +116,7 @@ namespace ImageEditor
             this.buttonUndo.TabIndex = 4;
             this.buttonUndo.Text = "Undo";
             this.buttonUndo.UseVisualStyleBackColor = true;
+            this.buttonUndo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonUndo_MouseMove);
             // 
             // numericUpDownColumns
             // 
@@ -136,7 +141,8 @@ namespace ImageEditor
             0,
             0,
             0});
-            this.numericUpDownColumns.ValueChanged += new System.EventHandler(this.numericUpDownColumns_ValueChanged);
+            this.numericUpDownColumns.ValueChanged += new System.EventHandler(this.NumericUpDownColumns_ValueChanged);
+            this.numericUpDownColumns.MouseMove += new System.Windows.Forms.MouseEventHandler(this.NumericUpDownColumns_MouseMove);
             // 
             // numericUpDownRows
             // 
@@ -161,7 +167,8 @@ namespace ImageEditor
             0,
             0,
             0});
-            this.numericUpDownRows.ValueChanged += new System.EventHandler(this.numericUpDownRows_ValueChanged);
+            this.numericUpDownRows.ValueChanged += new System.EventHandler(this.NumericUpDownRows_ValueChanged);
+            this.numericUpDownRows.MouseMove += new System.Windows.Forms.MouseEventHandler(this.NumericUpDownRows_MouseMove);
             // 
             // groupBoxCreatePixelsTable
             // 
@@ -170,7 +177,7 @@ namespace ImageEditor
             this.groupBoxCreatePixelsTable.Controls.Add(this.labelX);
             this.groupBoxCreatePixelsTable.Controls.Add(this.labelY);
             this.groupBoxCreatePixelsTable.Controls.Add(this.numericUpDownColumns);
-            this.groupBoxCreatePixelsTable.Controls.Add(this.buttonCreateNewImage);
+            this.groupBoxCreatePixelsTable.Controls.Add(this.buttonCreateNewGrid);
             this.groupBoxCreatePixelsTable.Location = new System.Drawing.Point(13, 413);
             this.groupBoxCreatePixelsTable.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxCreatePixelsTable.Name = "groupBoxCreatePixelsTable";
@@ -179,6 +186,7 @@ namespace ImageEditor
             this.groupBoxCreatePixelsTable.TabIndex = 7;
             this.groupBoxCreatePixelsTable.TabStop = false;
             this.groupBoxCreatePixelsTable.Text = "Create pixels table:";
+            this.groupBoxCreatePixelsTable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GroupBoxCreatePixelsTable_MouseMove);
             // 
             // labelX
             // 
@@ -189,6 +197,7 @@ namespace ImageEditor
             this.labelX.Size = new System.Drawing.Size(66, 16);
             this.labelX.TabIndex = 8;
             this.labelX.Text = "Columns:";
+            this.labelX.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelX_MouseMove);
             // 
             // labelY
             // 
@@ -199,6 +208,7 @@ namespace ImageEditor
             this.labelY.Size = new System.Drawing.Size(45, 16);
             this.labelY.TabIndex = 9;
             this.labelY.Text = "Rows:";
+            this.labelY.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelY_MouseMove);
             // 
             // groupBoxEditImage
             // 
@@ -208,70 +218,79 @@ namespace ImageEditor
             this.groupBoxEditImage.Location = new System.Drawing.Point(174, 413);
             this.groupBoxEditImage.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxEditImage.Name = "groupBoxEditImage";
-            this.groupBoxEditImage.Size = new System.Drawing.Size(150, 111);
+            this.groupBoxEditImage.Size = new System.Drawing.Size(155, 111);
             this.groupBoxEditImage.TabIndex = 8;
             this.groupBoxEditImage.TabStop = false;
-            this.groupBoxEditImage.Text = "Edit Image";
+            this.groupBoxEditImage.Text = "Operation with Image";
+            this.groupBoxEditImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GroupBoxEditImage_MouseMove);
             // 
             // buttonRedo
             // 
-            this.buttonRedo.Location = new System.Drawing.Point(82, 27);
+            this.buttonRedo.Enabled = false;
+            this.buttonRedo.Location = new System.Drawing.Point(87, 27);
             this.buttonRedo.Name = "buttonRedo";
             this.buttonRedo.Size = new System.Drawing.Size(62, 33);
             this.buttonRedo.TabIndex = 9;
             this.buttonRedo.Text = "Redo";
             this.buttonRedo.UseVisualStyleBackColor = true;
+            this.buttonRedo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonRedo_MouseMove);
             // 
             // buttonClear
             // 
             this.buttonClear.Location = new System.Drawing.Point(7, 72);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(138, 33);
+            this.buttonClear.Size = new System.Drawing.Size(142, 33);
             this.buttonClear.TabIndex = 10;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.ButtonClear_Click);
+            this.buttonClear.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonClear_MouseMove);
             // 
             // groupBoxImageInformation
             // 
             this.groupBoxImageInformation.Controls.Add(this.textBoxImageInformation);
-            this.groupBoxImageInformation.Location = new System.Drawing.Point(331, 413);
+            this.groupBoxImageInformation.Location = new System.Drawing.Point(336, 413);
             this.groupBoxImageInformation.Name = "groupBoxImageInformation";
-            this.groupBoxImageInformation.Size = new System.Drawing.Size(283, 111);
+            this.groupBoxImageInformation.Size = new System.Drawing.Size(278, 111);
             this.groupBoxImageInformation.TabIndex = 9;
             this.groupBoxImageInformation.TabStop = false;
             this.groupBoxImageInformation.Text = "Image information";
+            this.groupBoxImageInformation.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GroupBoxImageInformation_MouseMove);
             // 
             // textBoxImageInformation
             // 
+            this.textBoxImageInformation.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBoxImageInformation.Location = new System.Drawing.Point(6, 27);
             this.textBoxImageInformation.Multiline = true;
             this.textBoxImageInformation.Name = "textBoxImageInformation";
             this.textBoxImageInformation.ReadOnly = true;
             this.textBoxImageInformation.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxImageInformation.Size = new System.Drawing.Size(273, 76);
+            this.textBoxImageInformation.Size = new System.Drawing.Size(266, 76);
             this.textBoxImageInformation.TabIndex = 10;
-            this.textBoxImageInformation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxImageInformation.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TextBoxImageInformation_MouseMove);
             // 
-            // groupBoxFile
+            // groupBoxForFile
             // 
-            this.groupBoxFile.Controls.Add(this.buttonSaveImage);
-            this.groupBoxFile.Controls.Add(this.buttonLoadImage);
-            this.groupBoxFile.Location = new System.Drawing.Point(620, 413);
-            this.groupBoxFile.Name = "groupBoxFile";
-            this.groupBoxFile.Size = new System.Drawing.Size(152, 111);
-            this.groupBoxFile.TabIndex = 10;
-            this.groupBoxFile.TabStop = false;
-            this.groupBoxFile.Text = "File";
+            this.groupBoxForFile.Controls.Add(this.buttonSaveImage);
+            this.groupBoxForFile.Controls.Add(this.buttonLoadImage);
+            this.groupBoxForFile.Location = new System.Drawing.Point(620, 413);
+            this.groupBoxForFile.Name = "groupBoxForFile";
+            this.groupBoxForFile.Size = new System.Drawing.Size(152, 111);
+            this.groupBoxForFile.TabIndex = 10;
+            this.groupBoxForFile.TabStop = false;
+            this.groupBoxForFile.Text = "File";
+            this.groupBoxForFile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GroupBoxForFile_MouseMove);
             // 
-            // groupBoxImage
+            // groupBoxForImage
             // 
-            this.groupBoxImage.Controls.Add(this.pictureBoxImage);
-            this.groupBoxImage.Location = new System.Drawing.Point(12, 12);
-            this.groupBoxImage.Name = "groupBoxImage";
-            this.groupBoxImage.Size = new System.Drawing.Size(760, 394);
-            this.groupBoxImage.TabIndex = 11;
-            this.groupBoxImage.TabStop = false;
-            this.groupBoxImage.Text = "ImageJopa";
+            this.groupBoxForImage.Controls.Add(this.pictureBoxImage);
+            this.groupBoxForImage.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxForImage.Name = "groupBoxForImage";
+            this.groupBoxForImage.Size = new System.Drawing.Size(760, 394);
+            this.groupBoxForImage.TabIndex = 11;
+            this.groupBoxForImage.TabStop = false;
+            this.groupBoxForImage.Text = "Image";
+            this.groupBoxForImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GroupBoxForImage_MouseMove);
             // 
             // pictureBoxImage
             // 
@@ -282,16 +301,17 @@ namespace ImageEditor
             this.pictureBoxImage.Size = new System.Drawing.Size(741, 363);
             this.pictureBoxImage.TabIndex = 0;
             this.pictureBoxImage.TabStop = false;
-            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
-            this.pictureBoxImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseMove);
+            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBoxImage_MouseDown);
+            this.pictureBoxImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBoxImage_MouseMove);
+            this.pictureBoxImage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBoxImage_MouseUp);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 535);
-            this.Controls.Add(this.groupBoxImage);
-            this.Controls.Add(this.groupBoxFile);
+            this.Controls.Add(this.groupBoxForImage);
+            this.Controls.Add(this.groupBoxForFile);
             this.Controls.Add(this.groupBoxImageInformation);
             this.Controls.Add(this.groupBoxEditImage);
             this.Controls.Add(this.groupBoxCreatePixelsTable);
@@ -302,6 +322,8 @@ namespace ImageEditor
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Image Editor";
+            this.Deactivate += new System.EventHandler(this.FormMain_Deactivate);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormMain_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).EndInit();
             this.groupBoxCreatePixelsTable.ResumeLayout(false);
@@ -309,32 +331,32 @@ namespace ImageEditor
             this.groupBoxEditImage.ResumeLayout(false);
             this.groupBoxImageInformation.ResumeLayout(false);
             this.groupBoxImageInformation.PerformLayout();
-            this.groupBoxFile.ResumeLayout(false);
-            this.groupBoxImage.ResumeLayout(false);
+            this.groupBoxForFile.ResumeLayout(false);
+            this.groupBoxForImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonCreateNewImage;
         private System.Windows.Forms.OpenFileDialog openFileDialogFile;
         private System.Windows.Forms.SaveFileDialog saveFileDialogFile;
+        private System.Windows.Forms.Button buttonCreateNewGrid;
         private System.Windows.Forms.Button buttonSaveImage;
         private System.Windows.Forms.Button buttonLoadImage;
         private System.Windows.Forms.Button buttonUndo;
-        private System.Windows.Forms.NumericUpDown numericUpDownColumns;
-        private System.Windows.Forms.NumericUpDown numericUpDownRows;
-        private System.Windows.Forms.GroupBox groupBoxCreatePixelsTable;
-        private System.Windows.Forms.Label labelX;
-        private System.Windows.Forms.Label labelY;
-        private System.Windows.Forms.GroupBox groupBoxEditImage;
         private System.Windows.Forms.Button buttonRedo;
         private System.Windows.Forms.Button buttonClear;
-        private System.Windows.Forms.GroupBox groupBoxImageInformation;
+        private System.Windows.Forms.NumericUpDown numericUpDownColumns;
+        private System.Windows.Forms.NumericUpDown numericUpDownRows;
+        private System.Windows.Forms.Label labelX;
+        private System.Windows.Forms.Label labelY;
         private System.Windows.Forms.TextBox textBoxImageInformation;
-        private System.Windows.Forms.GroupBox groupBoxFile;
-        private System.Windows.Forms.GroupBox groupBoxImage;
+        private System.Windows.Forms.GroupBox groupBoxEditImage;
+        private System.Windows.Forms.GroupBox groupBoxImageInformation;
+        private System.Windows.Forms.GroupBox groupBoxCreatePixelsTable;
+        private System.Windows.Forms.GroupBox groupBoxForFile;
+        private System.Windows.Forms.GroupBox groupBoxForImage;
         private System.Windows.Forms.PictureBox pictureBoxImage;
     }
 }

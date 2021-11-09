@@ -1,54 +1,165 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace ImageEditor
 {
     public partial class FormMain : Form
     {
-        private DrawInImage _drawInInImage;
-        private int _columns, _rows;
+        private readonly ImageOutput _imageOutput;
 
         public FormMain()
         {
             InitializeComponent();
-            
-            _drawInInImage = new DrawInImage(pictureBoxImage);
-            _columns = (int)numericUpDownColumns.Value;
-            _rows = (int)numericUpDownRows.Value;
 
-            _drawInInImage.CreateGrid(_columns, _rows, Color.Red);
+            _imageOutput = new ImageOutput(pictureBoxImage);
+            ManagingOfPictureBox.ImageOutputPicture = _imageOutput;
+            ManagingOfGroupBoxes.ImageOutputPicture = _imageOutput;
+            ManagingOfTextBox.ImageOutputPicture = _imageOutput;
+
+            ManagingOfPictureBox.PictureBoxImage = pictureBoxImage;
+            ManagingOfNumericUpDown.NumericUpDownColumns = numericUpDownColumns;
+            ManagingOfNumericUpDown.NumericUpDownRows = numericUpDownRows;
+            ManagingOfTextBox.TextBoxImageInformation = textBoxImageInformation;
+            ManagingOfGroupBoxes.GroupBoxCreatePixelsTable = groupBoxCreatePixelsTable;
+            ManagingOfGroupBoxes.GroupBoxEditImage= groupBoxEditImage;
+            ManagingOfGroupBoxes.GroupBoxForFile= groupBoxForFile;
+            ManagingOfGroupBoxes.GroupBoxForImage= groupBoxForImage;
+            ManagingOfGroupBoxes.GroupBoxImageInformation = groupBoxImageInformation;
+            ManagingOfButtons.ButtonCreateNewGrid = buttonCreateNewGrid;
+            ManagingOfButtons.ButtonUndo = buttonUndo;
+            ManagingOfButtons.ButtonRedo = buttonRedo;
+            ManagingOfButtons.ButtonClear = buttonClear;
+            ManagingOfButtons.ButtonLoadImage = buttonLoadImage;
+            ManagingOfButtons.ButtonSaveImage = buttonSaveImage;
+
+            int columns = (int)numericUpDownColumns.Value;
+            int rows = (int) numericUpDownRows.Value;
+            ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
         }
 
-        private void numericUpDownRows_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDownRows_ValueChanged(object sender, EventArgs e)
         {
-            _rows = (int)numericUpDownRows.Value;
-            _drawInInImage.CreateGrid(_columns, _rows, Color.Red);
+            ManagingOfNumericUpDown.Rows = (int)numericUpDownRows.Value;
         }
 
-        private void numericUpDownColumns_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDownColumns_ValueChanged(object sender, EventArgs e)
         {
-            _columns = (int)numericUpDownColumns.Value;
-            _drawInInImage.CreateGrid(_columns, _rows, Color.Red);
+            ManagingOfNumericUpDown.Columns = (int)numericUpDownColumns.Value;
         }
 
-        private void pictureBoxImage_MouseMove(object sender, MouseEventArgs e)
+        private void PictureBoxImage_MouseMove(object sender, MouseEventArgs e)
         {
-            _drawInInImage.CreateSquareWithHatch(e.Location, Color.Black, Color.White);
+            ManagingOfPictureBox.MouseMoveInPictureBox(e);
         }
 
-        private void pictureBoxImage_MouseDown(object sender, MouseEventArgs e)
+        private void PictureBoxImage_MouseDown(object sender, MouseEventArgs e)
         {
-            _drawInInImage.CreateSquareFill(e.Location, Color.Black, true);
+            ManagingOfPictureBox.MouseDownInPictureBox(e);
         }
 
-        private void buttonLoadImage_Click(object sender, EventArgs e)
+        private void PictureBoxImage_MouseUp(object sender, MouseEventArgs e)
         {
-            object obj = pictureBoxImage.Parent;
-            GroupBox groupBox = (GroupBox)obj;
+            ManagingOfPictureBox.MouseUpInPictureBox(false);
+        }
 
-            textBoxImageInformation.Text = groupBox.Text;
+        private void ButtonClear_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.ClearImage();
+        }
+
+        private void ButtonCreateNewImage_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.CreateNewGrid();
+        }
+
+        private void GroupBoxForImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void GroupBoxCreatePixelsTable_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void GroupBoxEditImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void GroupBoxImageInformation_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void GroupBoxForFile_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void FormMain_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void LabelX_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void LabelY_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonCreateNewImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonUndo_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonRedo_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonClear_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonLoadImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonSaveImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void TextBoxImageInformation_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void NumericUpDownColumns_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void NumericUpDownRows_MouseMove(object sender, MouseEventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void FormMain_Deactivate(object sender, EventArgs e)
+        {
+            _imageOutput.ClearPreviousCellOfCursor();
         }
     }
 }
