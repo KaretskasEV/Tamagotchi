@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace ImageEditor
 {
@@ -9,6 +10,7 @@ namespace ImageEditor
         private static int _numberString = ResetValue;
         private static TextBox _textBoxImageInformation;
         private static ImageOutput _imageOutputPictureBox;
+        //private static List<string> HistoryAction = new List<string>();
 
         public static ImageOutput ImageOutputPicture
         {
@@ -53,8 +55,11 @@ namespace ImageEditor
             }
 
             _numberString++;
-            _textBoxImageInformation.Text = Convert.ToString(_numberString) + ". " + 
-                                            text + "\r\n" + _textBoxImageInformation.Text;
+
+            string stringOfInformation = Convert.ToString(_numberString) + ". " + text + "\r\n";
+            //HistoryAction.Add(stringOfInformation);
+
+            _textBoxImageInformation.Text = stringOfInformation + _textBoxImageInformation.Text;
         }
 
         public static void DeleteLastStringOfTextBox()
@@ -66,25 +71,29 @@ namespace ImageEditor
 
             const int notFindString = -1;
             const int notPreviousString = -1;
+            const int minusOneNumber = 1;
+            const int startIndexText = 0;
 
-            int numberString = _numberString;
-            string stringForFind = Convert.ToString(numberString) + ".";
+            int previousNumberString = _numberString - minusOneNumber;
 
-            if (numberString == notPreviousString)
+            if (previousNumberString == notPreviousString)
             {
                 return;
             }
 
-            int numberFindOfString = _textBoxImageInformation.Text.LastIndexOf(stringForFind, StringComparison.CurrentCulture);
+            string stringForFind = Convert.ToString(previousNumberString) + ".";
+            int numberFindOfString = _textBoxImageInformation.Text.IndexOf(stringForFind, StringComparison.CurrentCulture);
 
             if (numberFindOfString != notFindString)
             {
-                _textBoxImageInformation.Text = _textBoxImageInformation.Text.Remove(numberFindOfString);
+                _textBoxImageInformation.Text = _textBoxImageInformation.Text.Remove(startIndexText, numberFindOfString);
             }
             else
             {
                 return;
             }
+
+            //HistoryAction.RemoveAt(_numberString);
 
             _numberString--;
         }
@@ -98,6 +107,14 @@ namespace ImageEditor
 
             _textBoxImageInformation.Text = "";
             _numberString = ResetValue;
+        }
+
+        public static void CheckForRecord(string text)
+        {
+            if (ManagingOfButtons.UndoIsPress == false)
+            {
+                WriteTextInTextBox(text);
+            }
         }
     }
 }

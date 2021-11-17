@@ -104,6 +104,7 @@ namespace ImageEditor
             this.buttonLoadImage.TabIndex = 3;
             this.buttonLoadImage.Text = "Load Image";
             this.buttonLoadImage.UseVisualStyleBackColor = true;
+            this.buttonLoadImage.Click += new System.EventHandler(this.buttonLoadImage_Click);
             this.buttonLoadImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonLoadImage_MouseMove);
             // 
             // buttonUndo
@@ -116,6 +117,7 @@ namespace ImageEditor
             this.buttonUndo.TabIndex = 4;
             this.buttonUndo.Text = "Undo";
             this.buttonUndo.UseVisualStyleBackColor = true;
+            this.buttonUndo.Click += new System.EventHandler(this.ButtonUndo_Click);
             this.buttonUndo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonUndo_MouseMove);
             // 
             // numericUpDownColumns
@@ -233,6 +235,7 @@ namespace ImageEditor
             this.buttonRedo.TabIndex = 9;
             this.buttonRedo.Text = "Redo";
             this.buttonRedo.UseVisualStyleBackColor = true;
+            this.buttonRedo.Click += new System.EventHandler(this.buttonRedo_Click);
             this.buttonRedo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonRedo_MouseMove);
             // 
             // buttonClear

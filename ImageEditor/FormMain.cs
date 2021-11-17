@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace ImageEditor
 {
     public partial class FormMain : Form
     {
         private readonly ImageOutput _imageOutput;
+        
 
         public FormMain()
         {
+            const int SizeCell = 21;
+            const int MaximumColumns = 35;
+            const int MaximunRows = 17;
+
             InitializeComponent();
 
-            _imageOutput = new ImageOutput(pictureBoxImage);
+            _imageOutput = new ImageOutput(pictureBoxImage, SizeCell, MaximumColumns, MaximunRows);
             ManagingOfPictureBox.ImageOutputPicture = _imageOutput;
+            ManagingOfButtons.ImageOutputPicture = _imageOutput;
             ManagingOfGroupBoxes.ImageOutputPicture = _imageOutput;
             ManagingOfTextBox.ImageOutputPicture = _imageOutput;
+            HistoryOfDraw.ImageOutputPicture = _imageOutput;
 
             ManagingOfPictureBox.PictureBoxImage = pictureBoxImage;
             ManagingOfNumericUpDown.NumericUpDownColumns = numericUpDownColumns;
@@ -32,9 +40,15 @@ namespace ImageEditor
             ManagingOfButtons.ButtonLoadImage = buttonLoadImage;
             ManagingOfButtons.ButtonSaveImage = buttonSaveImage;
 
+            _imageOutput.CreateFillCell += ManagingOfPictureBox.SaveInStack;
+            _imageOutput.InformationOutput += ManagingOfTextBox.CheckForRecord;
+            _imageOutput.CreateNewGrid += ManagingOfPictureBox.ChangeSizePictureBox;
+            _imageOutput.CreateNewGridAdditionalAction += ManagingOfPictureBox.ShowPictureBoxInTheCentreGroupBox;
+            ManagingOfPictureBox.ModifiedOfPicture += ManagingOfButtons.RedoEnabledFalse;
+
             int columns = (int)numericUpDownColumns.Value;
             int rows = (int) numericUpDownRows.Value;
-            ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
+            ManagingOfButtons.CreateNewGrid(columns, rows);
         }
 
         private void NumericUpDownRows_ValueChanged(object sender, EventArgs e)
@@ -69,7 +83,10 @@ namespace ImageEditor
 
         private void ButtonCreateNewImage_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.CreateNewGrid();
+            int columns = ManagingOfNumericUpDown.Columns;
+            int rows = ManagingOfNumericUpDown.Rows;
+
+            ManagingOfButtons.CreateNewGrid(columns, rows);
         }
 
         private void GroupBoxForImage_MouseMove(object sender, MouseEventArgs e)
@@ -160,6 +177,21 @@ namespace ImageEditor
         private void FormMain_Deactivate(object sender, EventArgs e)
         {
             _imageOutput.ClearPreviousCellOfCursor();
+        }
+
+        private void ButtonUndo_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.UndoAction();
+        }
+
+        private void buttonRedo_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.RedoAction();
+        }
+
+        private void buttonLoadImage_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.RedoEnabledTrue();
         }
     }
 }

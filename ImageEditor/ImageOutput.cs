@@ -8,14 +8,18 @@ namespace ImageEditor
     public sealed class ImageOutput: IDisposable
     {
         public enum SaveCell { Save, NotSave, Remove }
-        private const int CellSize = 21;
+        public event Action<Point, Color, SaveCell> CreateFillCell;
+        public event Action<string> InformationOutput;
+        public event Action<int, int, int> CreateNewGrid;
+        public event Action CreateNewGridAdditionalAction;
+
         private const int Zero = 0;
-        private const int MaximumNumberOfColumns = 35;
-        private const int MaximumNumberOfRows = 17;
         private const int ReferenceOfBeginNewPoint = 2;
         private const int InvalidCoordinate = -1;
         private const int ErrorsSizePictureBox = 2;
 
+        private readonly int MaximumNumberOfColumns;
+        private readonly int MaximumNumberOfRows;
         private readonly Bitmap _bitmap;
         private readonly PictureBox _pictureForDraw;
         private readonly Graphics _graphics;
@@ -25,13 +29,16 @@ namespace ImageEditor
         private SaveCell _saveCell;
         private bool[,] _arrayCells;
         private int _currentMaximumColumns, _currentMaximumRows;
+        private int _cellSize;
         private bool _invertCell;
         private bool _modifiedCell;
         private bool _disposed;
         private bool _clearCellOfCursor;
 
-        public ImageOutput(PictureBox objectForDraw)
+        public ImageOutput(PictureBox objectForDraw, int cellSize, int MaximumColumns, int MaximumRows)
         {
+            const int oneColumnOrRows = 1;
+
             if (objectForDraw == null)
             {
                 throw new NullReferenceException();
@@ -43,8 +50,17 @@ namespace ImageEditor
             _previousCellOfCursor = new Point(InvalidCoordinate, InvalidCoordinate);
             _previousFillCell = new Point(InvalidCoordinate, InvalidCoordinate);
             _previousCalculationCoordinateOfCursor = new Point(InvalidCoordinate, InvalidCoordinate);
+            _cellSize = cellSize;
+            _currentMaximumColumns = MaximumColumns - oneColumnOrRows;
+            _currentMaximumRows = MaximumRows - oneColumnOrRows;
+            MaximumNumberOfColumns = MaximumColumns;
+            MaximumNumberOfRows = MaximumRows;
             _saveCell = SaveCell.NotSave;
         }
+
+        public bool[,] ArrayCells { get => _arrayCells; }
+        public int CurrentMaximumColumns { get => _currentMaximumColumns; }
+        public int CurrentMaximumRows { get => _currentMaximumRows; }
 
         ~ImageOutput()
         {
@@ -88,10 +104,18 @@ namespace ImageEditor
                 if ((saveCell == SaveCell.Save) & (CheckFillCell(currentCell) == false))
                 {
                     SaveCoordinate(currentCell);
+                    if(CreateFillCell != null)
+                    {
+                        CreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
+                    }
                 }
                 else if ((saveCell == SaveCell.Remove) & CheckFillCell(currentCell))
                 {
                     RemoveCoordinate(currentCell);
+                    if (CreateFillCell != null)
+                    {
+                        CreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
+                    }
                 }
 
                 coordinatePoint = CalculationOfStartingCoordinate(coordinatePoint);
@@ -108,36 +132,33 @@ namespace ImageEditor
         private void SaveCoordinate(Point cell)
         {
             _arrayCells[cell.X, cell.Y] = true;
-            ManagingOfTextBox.WriteTextInTextBox($"Save Cell: [{cell.X} : {cell.Y}];");
+            if(InformationOutput != null)
+            {
+                InformationOutput.Invoke($"Save Cell: [{cell.X} : {cell.Y}];");
+            }
         }
 
         private void RemoveCoordinate(Point cell)
         {
             _arrayCells[cell.X, cell.Y] = false;
-            ManagingOfTextBox.WriteTextInTextBox($"Remove Cell: [{cell.X} : {cell.Y}];");
+            if (InformationOutput != null)
+            {
+                InformationOutput.Invoke($"Remove Cell: [{cell.X} : {cell.Y}];");
+            }
         }
 
         public void CreateCursor(Point coordinatePoint, Color colorRectangle, Color backColor)
         {
             Point currentCell = CalculationNumberCell(coordinatePoint);
             
-            if ((currentCell.Equals(_previousCellOfCursor) == false))
+            if (currentCell.Equals(_previousCellOfCursor) == false)
             {
                 ClearPreviousCellOfCursor();
                 _clearCellOfCursor = false;
 
                 coordinatePoint = CalculationOfStartingCoordinate(coordinatePoint);
 
-                if (CheckFillCell(currentCell))
-                {
-                    _colorFillCell = DefineCellColor(coordinatePoint);
-                    _invertColor = InvertColor(_colorFillCell);
-                    DrawSquare(coordinatePoint, _invertColor, colorRectangle, HatchStyle.WideUpwardDiagonal);
-                }
-                else
-                {
-                    DrawSquare(coordinatePoint, colorRectangle, backColor, HatchStyle.WideUpwardDiagonal);
-                }
+                DrawHatchCell(currentCell, coordinatePoint, colorRectangle, backColor);
 
                 _previousCellOfCursor = currentCell;
                 _previousCalculationCoordinateOfCursor = coordinatePoint;
@@ -165,20 +186,34 @@ namespace ImageEditor
             _clearCellOfCursor = true;
         }
 
+        private void DrawHatchCell(Point currentCell, Point coordinatePoint, Color colorRectangle, Color backColor)
+        {
+            if (CheckFillCell(currentCell))
+            {
+                _colorFillCell = DefineCellColor(coordinatePoint);
+                _invertColor = InvertColor(_colorFillCell);
+                DrawSquare(coordinatePoint, _invertColor, colorRectangle, HatchStyle.WideUpwardDiagonal);
+            }
+            else
+            {
+                DrawSquare(coordinatePoint, colorRectangle, backColor, HatchStyle.WideUpwardDiagonal);
+            }
+        }
+
         private Color DefineCellColor(Point coordinatePoint)
         {
             return _bitmap.GetPixel(coordinatePoint.X, coordinatePoint.Y);
         }
 
-        private static Color InvertColor(Color color)
+        public static Color InvertColor(Color color)
         {
             return Color.FromArgb(color.A, 0xFF - color.R, 0xFF - color.G, 0xFF - color.B);
         }
 
         private Point CalculationNumberCell(Point coordinatePoint)
         {
-            coordinatePoint.X /= CellSize;
-            coordinatePoint.Y /= CellSize;
+            coordinatePoint.X /= _cellSize;
+            coordinatePoint.Y /= _cellSize;
 
             if (coordinatePoint.X > _currentMaximumColumns)
             {
@@ -206,8 +241,8 @@ namespace ImageEditor
         private Point CalculationOfStartingCoordinate(Point coordinatePoint)
         {
             Point cell = CalculationNumberCell(coordinatePoint);
-            coordinatePoint.X = cell.X * CellSize + ReferenceOfBeginNewPoint;
-            coordinatePoint.Y = cell.Y * CellSize + ReferenceOfBeginNewPoint;
+            coordinatePoint.X = cell.X * _cellSize + ReferenceOfBeginNewPoint;
+            coordinatePoint.Y = cell.Y * _cellSize + ReferenceOfBeginNewPoint;
 
             return coordinatePoint;
         }
@@ -226,8 +261,6 @@ namespace ImageEditor
 
         private bool CheckFillCell(Point cell)
         {
-            //Point cell = CalculationNumberCell(coordinatePoint);
-
             if (cell.X < Zero | cell.Y < Zero | cell.X > _currentMaximumColumns | cell.Y > _currentMaximumRows)
             {
                 return false;
@@ -248,7 +281,7 @@ namespace ImageEditor
             const int secondDimensionOfArray = 1;
             const int widthPen = 1;
 
-            if ((columns > MaximumNumberOfColumns & columns < minimumNumberOfColumnsOrRows) | 
+            if ((columns > MaximumNumberOfColumns & columns < minimumNumberOfColumnsOrRows) |
                 (rows > MaximumNumberOfRows & rows < minimumNumberOfColumnsOrRows))
             {
                 MessageBox.Show(@"Columns must be from 1 to 35. Rows must be from 1 to 17", @"Error!!!");
@@ -259,27 +292,99 @@ namespace ImageEditor
             _currentMaximumColumns = _arrayCells.GetUpperBound(firstDimensionOfArray);
             _currentMaximumRows = _arrayCells.GetUpperBound(secondDimensionOfArray);
             
-            int maximumWidthOfColumns = CellSize * columns;
-            int maximumHeightOfRows = CellSize * rows;
+            int maximumWidthOfColumns = _cellSize * columns;
+            int maximumHeightOfRows = _cellSize * rows;
 
             _graphics.Clear(Color.White);
             using var pen = new Pen(colorGrid, widthPen);
             pen.Color = colorGrid;
 
-            for (int stepColumns = CellSize; stepColumns < maximumWidthOfColumns; stepColumns += CellSize)
+            for (int stepColumns = _cellSize; stepColumns < maximumWidthOfColumns; stepColumns += _cellSize)
             {
                 _graphics.DrawLine(pen, stepColumns, Zero, stepColumns, maximumHeightOfRows);
             }
 
-            for (int stepRows = CellSize; stepRows < maximumHeightOfRows; stepRows += CellSize)
+            for (int stepRows = _cellSize; stepRows < maximumHeightOfRows; stepRows += _cellSize)
             {
                 _graphics.DrawLine(pen, Zero, stepRows, maximumWidthOfColumns, stepRows);
             }
 
-            ManagingOfPictureBox.ChangeSizePictureBox(_pictureForDraw, columns, rows, CellSize);
-            ManagingOfPictureBox.ShowPictureBoxInTheCentreGroupBox(_pictureForDraw);
+            if(CreateNewGrid != null)
+            {
+                CreateNewGrid.Invoke(columns, rows, _cellSize);
+            }
+
+            if(CreateNewGridAdditionalAction != null)
+            {
+                CreateNewGridAdditionalAction.Invoke();
+            }
 
             _pictureForDraw.Image = _bitmap;
+        }
+
+        public void ShowAllFillCells(Color colorCell, bool[,] arrayCells)
+        {
+            const int firstDimensionOfArray = 0;
+            const int secondDimensionOfArray = 1;
+            Color invertColorCell = InvertColor(colorCell);
+            var currentCoordinate = new Point();
+
+            if((arrayCells.GetUpperBound(firstDimensionOfArray) != _currentMaximumColumns) | 
+               (arrayCells.GetUpperBound(secondDimensionOfArray) != _currentMaximumRows))
+            {
+                MessageBox.Show("Array 'arrayCells' isn't equal to grid.", "Error!!!");
+                return;
+            }
+
+            for (int columns = Zero; columns <= _currentMaximumColumns; columns++)
+            {
+                for(int rows = Zero; rows <= _currentMaximumRows; rows++)
+                {
+                    currentCoordinate.X = columns * _cellSize;
+                    currentCoordinate.Y = rows * _cellSize;
+                    currentCoordinate = CalculationOfStartingCoordinate(currentCoordinate);
+
+                    if(arrayCells[columns, rows])
+                    {
+                        DrawSquare(currentCoordinate, colorCell, colorCell, HatchStyle.WideUpwardDiagonal);
+                    }
+                    else
+                    {
+                        DrawSquare(currentCoordinate, invertColorCell, invertColorCell, HatchStyle.WideUpwardDiagonal);
+                    }
+                }
+            }
+
+            CopyArrayCells(arrayCells);
+        }
+
+        private void CopyArrayCells(bool[,] arrayCells)
+        {
+            const int firstDimensionOfArray = 0;
+            const int secondDimensionOfArray = 1;
+
+            _currentMaximumColumns = arrayCells.GetUpperBound(firstDimensionOfArray);
+            _currentMaximumRows = arrayCells.GetUpperBound(secondDimensionOfArray);
+
+            _arrayCells = (bool[,])arrayCells.Clone();
+        }
+
+        public void ClearGrid(Color colorClearCell)
+        {
+            var currentCoordinate = new Point();
+
+            for (int columns = Zero; columns <= _currentMaximumColumns; columns++)
+            {
+                for (int rows = Zero; rows <= _currentMaximumRows; rows++)
+                {
+                    currentCoordinate.X = columns * _cellSize;
+                    currentCoordinate.Y = rows * _cellSize;
+                    currentCoordinate = CalculationOfStartingCoordinate(currentCoordinate);
+
+                    DrawSquare(currentCoordinate, colorClearCell, colorClearCell, HatchStyle.WideUpwardDiagonal);
+                    _arrayCells[columns, rows] = false;
+                }
+            }
         }
     }
 }

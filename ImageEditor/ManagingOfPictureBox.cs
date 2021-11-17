@@ -6,9 +6,12 @@ namespace ImageEditor
 {
     public static class ManagingOfPictureBox
     {
+
         private static bool _pressButtonMouse;
         private static ImageOutput _imageOutputPictureBox;
         private static PictureBox _pictureBoxImange;
+
+        public static event Action ModifiedOfPicture;
 
         public static ImageOutput ImageOutputPicture
         {
@@ -42,9 +45,24 @@ namespace ImageEditor
             }
         }
 
+        private static void ModifiedTrue()
+        {
+            if(ModifiedOfPicture != null)
+            {
+                ModifiedOfPicture.Invoke();
+            }
+        }
+
         public static void CreateNewGridInPictureBox(int columns, int rows)
         {
             _imageOutputPictureBox.CreateGrid(columns, rows, Color.Black);
+            ModifiedTrue();
+        }
+
+        public static void ClearGridInPictureBox()
+        {
+            _imageOutputPictureBox.ClearGrid(Color.White);
+            ModifiedTrue();
         }
 
         public static void MouseMoveInPictureBox(MouseEventArgs mouseEventArgs)
@@ -55,29 +73,29 @@ namespace ImageEditor
             }
             else
             {
-                if (MouseButtons.Left == mouseEventArgs.Button)
-                {
-                    _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.Black, ImageOutput.SaveCell.Save);
-                }
-                else if (MouseButtons.Right == mouseEventArgs.Button)
-                {
-                    _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.White, ImageOutput.SaveCell.Remove);
-                }
+                PressMouseOfButton(mouseEventArgs);
             }
         }
 
         public static void MouseDownInPictureBox(MouseEventArgs mouseEventArgs)
         {
+            PressMouseOfButton(mouseEventArgs);
+            
+            _pressButtonMouse = true;
+        }
+
+        private static void PressMouseOfButton(MouseEventArgs mouseEventArgs)
+        {
             if (MouseButtons.Left == mouseEventArgs.Button)
             {
                 _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.Black, ImageOutput.SaveCell.Save);
+                ModifiedTrue();
             }
             else if (MouseButtons.Right == mouseEventArgs.Button)
             {
                 _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.White, ImageOutput.SaveCell.Remove);
+                ModifiedTrue();
             }
-            
-            _pressButtonMouse = true;
         }
 
         public static void MouseUpInPictureBox(bool mouseUp)
@@ -85,12 +103,12 @@ namespace ImageEditor
             _pressButtonMouse = mouseUp;
         }
 
-        public static void ChangeSizePictureBox(PictureBox pictureBox, int columns, int rows, int cellSize)
+        public static void ChangeSizePictureBox(int columns, int rows, int cellSize)
         {
             const int error = 3;
             const int zero = 0;
 
-            if (pictureBox == null)
+            if (_pictureBoxImange == null)
             {
                 throw new NullReferenceException();
             }
@@ -100,37 +118,45 @@ namespace ImageEditor
                 MessageBox.Show(@"Columns or rows or cellSize in method 'ChangeSizePictureBox' is 0", @"Error!");
             }
 
-            pictureBox.Width = columns * cellSize + error;
-            pictureBox.Height = rows * cellSize + error;
+            _pictureBoxImange.Width = columns * cellSize + error;
+            _pictureBoxImange.Height = rows * cellSize + error;
         }
 
-        public static void ShowPictureBoxInTheCentreGroupBox(PictureBox pictureBox)
+        public static void ShowPictureBoxInTheCentreGroupBox()
         {
-            if (pictureBox == null)
+            if(_pictureBoxImange == null)
             {
                 throw new NullReferenceException();
             }
 
-            object objectParent = pictureBox.Parent;
+            object objectParent = _pictureBoxImange.Parent;
             if (objectParent is GroupBox)
             {
                 GroupBox groupBox = objectParent as GroupBox;
 
                 int halfOfWidthGroupBox = groupBox.Width / 2;
                 int halfOfHeightGroupBox = groupBox.Height / 2;
-                int halfOfWidthPictureBox = pictureBox.Width / 2;
-                int halfOfHeightPictureBox = pictureBox.Height / 2;
+                int halfOfWidthPictureBox = _pictureBoxImange.Width / 2;
+                int halfOfHeightPictureBox = _pictureBoxImange.Height / 2;
                 var point = new Point
                 {
                     X = halfOfWidthGroupBox - halfOfWidthPictureBox,
                     Y = halfOfHeightGroupBox - halfOfHeightPictureBox
                 };
 
-                pictureBox.Location = point;
+                _pictureBoxImange.Location = point;
             }
             else
             {
                 MessageBox.Show(@"PictureBox isn't inside the GroupBox", @"Error!!!");
+            }
+        }
+
+        public static void SaveInStack(Point coordinatePoint, Color colorRectangle, ImageOutput.SaveCell saveCell)
+        {
+            if (ManagingOfButtons.UndoIsPress == false)
+            {
+                HistoryOfDraw.CreateSquareFillCell(coordinatePoint, colorRectangle, saveCell);
             }
         }
     }

@@ -105,30 +105,5 @@ namespace ImageEditor
                 }
             }
         }
-
-        public static void MouseMoveCreatePixelsTableInGroupBox()
-        {
-            _imageOutputPictureBox.ClearPreviousCellOfCursor();
-        }
-
-        public static void MouseMoveEditImageInGroupBox()
-        {
-            _imageOutputPictureBox.ClearPreviousCellOfCursor();
-        }
-
-        public static void MouseMoveImageInformationInGroupBox()
-        {
-            _imageOutputPictureBox.ClearPreviousCellOfCursor();
-        }
-
-        public static void MouseMoveForFileInGroupBox()
-        {
-            _imageOutputPictureBox.ClearPreviousCellOfCursor();
-        }
-
-        public static void MouseMoveForImageInGroupBox()
-        {
-            _imageOutputPictureBox.ClearPreviousCellOfCursor();
-        }
     }
 }
