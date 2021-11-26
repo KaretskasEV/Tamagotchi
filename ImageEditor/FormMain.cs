@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace ImageEditor
 {
@@ -20,35 +19,26 @@ namespace ImageEditor
             _imageOutput = new ImageOutput(pictureBoxImage, SizeCell, MaximumColumns, MaximunRows);
             ManagingOfPictureBox.ImageOutputPicture = _imageOutput;
             ManagingOfButtons.ImageOutputPicture = _imageOutput;
-            ManagingOfGroupBoxes.ImageOutputPicture = _imageOutput;
-            ManagingOfTextBox.ImageOutputPicture = _imageOutput;
             HistoryOfDraw.ImageOutputPicture = _imageOutput;
 
             ManagingOfPictureBox.PictureBoxImage = pictureBoxImage;
             ManagingOfNumericUpDown.NumericUpDownColumns = numericUpDownColumns;
             ManagingOfNumericUpDown.NumericUpDownRows = numericUpDownRows;
             ManagingOfTextBox.TextBoxImageInformation = textBoxImageInformation;
-            ManagingOfGroupBoxes.GroupBoxCreatePixelsTable = groupBoxCreatePixelsTable;
-            ManagingOfGroupBoxes.GroupBoxEditImage= groupBoxEditImage;
-            ManagingOfGroupBoxes.GroupBoxForFile= groupBoxForFile;
-            ManagingOfGroupBoxes.GroupBoxForImage= groupBoxForImage;
-            ManagingOfGroupBoxes.GroupBoxImageInformation = groupBoxImageInformation;
-            ManagingOfButtons.ButtonCreateNewGrid = buttonCreateNewGrid;
             ManagingOfButtons.ButtonUndo = buttonUndo;
             ManagingOfButtons.ButtonRedo = buttonRedo;
-            ManagingOfButtons.ButtonClear = buttonClear;
-            ManagingOfButtons.ButtonLoadImage = buttonLoadImage;
-            ManagingOfButtons.ButtonSaveImage = buttonSaveImage;
+            SerializeInFile.OpenFileDialog = openFileDialog;
+            SerializeInFile.SaveFileDialog = saveFileDialog;
 
-            _imageOutput.CreateFillCell += ManagingOfPictureBox.SaveInStack;
-            _imageOutput.InformationOutput += ManagingOfTextBox.CheckForRecord;
-            _imageOutput.CreateNewGrid += ManagingOfPictureBox.ChangeSizePictureBox;
-            _imageOutput.CreateNewGridAdditionalAction += ManagingOfPictureBox.ShowPictureBoxInTheCentreGroupBox;
-            ManagingOfPictureBox.ModifiedOfPicture += ManagingOfButtons.RedoEnabledFalse;
+            _imageOutput.OnCreateFillCell += ManagingOfPictureBox.SaveInStack;
+            _imageOutput.OnInformationOutput += ManagingOfTextBox.CheckForRecord;
+            _imageOutput.OnCreateNewGrid += ManagingOfPictureBox.ChangeSizePictureBox;
+            _imageOutput.OnCreateNewGridAdditionalAction += ManagingOfPictureBox.ShowPictureBoxInTheCentreGroupBox;
+            HistoryOfDraw.OnChangeOfPicture += ManagingOfButtons.RedoEnableFalse;
 
             int columns = (int)numericUpDownColumns.Value;
             int rows = (int) numericUpDownRows.Value;
-            ManagingOfButtons.CreateNewGrid(columns, rows);
+            ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
         }
 
         private void NumericUpDownRows_ValueChanged(object sender, EventArgs e)
@@ -184,14 +174,18 @@ namespace ImageEditor
             ManagingOfButtons.UndoAction();
         }
 
-        private void buttonRedo_Click(object sender, EventArgs e)
+        private void ButtonRedo_Click(object sender, EventArgs e)
         {
             ManagingOfButtons.RedoAction();
         }
-
-        private void buttonLoadImage_Click(object sender, EventArgs e)
+        private void ButtonSaveImage_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.RedoEnabledTrue();
+            ManagingOfButtons.SaveImage(_imageOutput.ArrayCells);
+        }
+
+        private void ButtonLoadImage_Click(object sender, EventArgs e)
+        {
+            ManagingOfButtons.LoadImage();
         }
     }
 }

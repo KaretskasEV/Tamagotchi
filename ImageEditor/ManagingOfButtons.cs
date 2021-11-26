@@ -5,18 +5,20 @@ namespace ImageEditor
 {
     public static class ManagingOfButtons
     {
-        private static Button _buttonCreateNewGrid;
         private static Button _buttonUndo;
         private static Button _buttonRedo;
-        private static Button _buttonClear;
-        private static Button _buttonLoadImage;
-        private static Button _buttonSaveImage;
         private static bool _buttonUndoIsPress;
+        private static bool _buttonRedoIsPress;
         private static ImageOutput _imageOutputPictureBox;
 
         public static bool UndoIsPress
         {
             get => _buttonUndoIsPress;
+        }
+
+        public static bool RedoIsPress
+        {
+            get => _buttonRedoIsPress;
         }
 
         public static ImageOutput ImageOutputPicture
@@ -26,21 +28,6 @@ namespace ImageEditor
                 if (value != null)
                 {
                     _imageOutputPictureBox = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
-        public static Button ButtonCreateNewGrid
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonCreateNewGrid = value;
                 }
                 else
                 {
@@ -79,57 +66,12 @@ namespace ImageEditor
             }
         }
 
-        public static Button ButtonClear
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonClear = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
-        public static Button ButtonLoadImage
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonLoadImage = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
-        public static Button ButtonSaveImage
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonSaveImage = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
         public static void ClearImage()
         {
             if (_buttonUndoIsPress == false)
             {
-                HistoryOfDraw.ClearImage(_imageOutputPictureBox.ArrayCells);
-                ManagingOfTextBox.WriteTextInTextBox($"Clear a grid.");
+                HistoryOfDraw.UndoClearImage(_imageOutputPictureBox.ArrayCells);
+                ManagingOfTextBox.WriteTextInTextBox($"Clear the grid.");
             }
 
             ManagingOfPictureBox.ClearGridInPictureBox();
@@ -138,24 +80,18 @@ namespace ImageEditor
         public static void CreateNewGrid(int columns, int rows)
         {
             const int oneColumnOrRow = 1;
-            bool[,] array;
 
-            if(_imageOutputPictureBox.ArrayCells == null)
-            {
-                array = new bool[columns, rows];
-            }
-            else
-            {
-                array = _imageOutputPictureBox.ArrayCells;
-            }
+            bool[,] array = _imageOutputPictureBox.ArrayCells;
 
             if (_buttonUndoIsPress == false)
             {
-                HistoryOfDraw.CreateNewGrid(_imageOutputPictureBox.CurrentMaximumColumns + oneColumnOrRow,
+                HistoryOfDraw.UndoCreateNewGrid(_imageOutputPictureBox.CurrentMaximumColumns + oneColumnOrRow,
                                             _imageOutputPictureBox.CurrentMaximumRows + oneColumnOrRow, array);
-                ManagingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} - {rows}");
+                ManagingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} x {rows}");
             }
-            
+
+            ManagingOfNumericUpDown.Columns = columns;
+            ManagingOfNumericUpDown.Rows = rows;
             ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
         }
 
@@ -175,7 +111,8 @@ namespace ImageEditor
         {
             _buttonUndoIsPress = true;
 
-            HistoryOfDraw.ReturnAndActivatedMethod();
+            HistoryOfDraw.UndoAction();
+            RedoEnableTrue();
 
             if(HistoryOfDraw.StackUndoEmpty == false)
             {
@@ -187,12 +124,24 @@ namespace ImageEditor
 
         public static void RedoAction()
         {
+            _buttonRedoIsPress = true;
+            HistoryOfDraw.RedoAction();
 
+            if(HistoryOfDraw.StackRedoEmpty == false)
+            {
+                RedoEnableFalse();
+            }
+
+            _buttonRedoIsPress= false;
         }
 
         public static void UndoEnableFalse()
         {
             ButtonEnable(_buttonUndo, false);
+            if (_buttonRedo.Enabled)
+            {
+                _buttonRedo.Select();
+            }
         }
 
         public static void UndoEnableTrue()
@@ -200,14 +149,50 @@ namespace ImageEditor
             ButtonEnable (_buttonUndo, true);
         }
 
-        public static void RedoEnabledFalse()
+        public static void RedoEnableFalse()
         {
+            HistoryOfDraw.RedoClearStack();
             ButtonEnable(_buttonRedo, false);
+            if (_buttonUndo.Enabled)
+            {
+                _buttonUndo.Select();
+            }
         }
 
-        public static void RedoEnabledTrue()
+        public static void RedoEnableTrue()
         {
             ButtonEnable(_buttonRedo, true);
+        }
+
+        public static void SaveImage(bool[,] arrayCells)
+        {
+            SerializeInFile.SaveFile(arrayCells);
+        }
+
+        public static void LoadImage()
+        {
+            const int firstDimensionOfArray = 0;
+            const int secondDimensionOfArray = 1;
+            int columns, rows;
+
+            bool[,] arrayCells = SerializeInFile.ReadFile();
+
+            if(arrayCells == null)
+            {
+                return;
+            }
+
+            columns=arrayCells.GetLength(firstDimensionOfArray);
+            rows=arrayCells.GetLength(secondDimensionOfArray);
+
+            ManagingOfTextBox.ClearTextInTextBox();
+            CreateNewGrid(columns, rows);
+
+            RedoEnableFalse();
+            HistoryOfDraw.UndoClearStack();
+            UndoEnableFalse();
+
+            ManagingOfPictureBox.ShowAllFillCells(arrayCells);
         }
     }
 }

@@ -8,10 +8,10 @@ namespace ImageEditor
     public sealed class ImageOutput: IDisposable
     {
         public enum SaveCell { Save, NotSave, Remove }
-        public event Action<Point, Color, SaveCell> CreateFillCell;
-        public event Action<string> InformationOutput;
-        public event Action<int, int, int> CreateNewGrid;
-        public event Action CreateNewGridAdditionalAction;
+        public event Action<Point, Color, SaveCell> OnCreateFillCell;
+        public event Action<string> OnInformationOutput;
+        public event Action<int, int, int> OnCreateNewGrid;
+        public event Action OnCreateNewGridAdditionalAction;
 
         private const int Zero = 0;
         private const int ReferenceOfBeginNewPoint = 2;
@@ -20,6 +20,7 @@ namespace ImageEditor
 
         private readonly int MaximumNumberOfColumns;
         private readonly int MaximumNumberOfRows;
+        private readonly int _cellSize;
         private readonly Bitmap _bitmap;
         private readonly PictureBox _pictureForDraw;
         private readonly Graphics _graphics;
@@ -29,7 +30,6 @@ namespace ImageEditor
         private SaveCell _saveCell;
         private bool[,] _arrayCells;
         private int _currentMaximumColumns, _currentMaximumRows;
-        private int _cellSize;
         private bool _invertCell;
         private bool _modifiedCell;
         private bool _disposed;
@@ -104,17 +104,17 @@ namespace ImageEditor
                 if ((saveCell == SaveCell.Save) & (CheckFillCell(currentCell) == false))
                 {
                     SaveCoordinate(currentCell);
-                    if(CreateFillCell != null)
+                    if(OnCreateFillCell != null)
                     {
-                        CreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
+                        OnCreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
                     }
                 }
                 else if ((saveCell == SaveCell.Remove) & CheckFillCell(currentCell))
                 {
                     RemoveCoordinate(currentCell);
-                    if (CreateFillCell != null)
+                    if (OnCreateFillCell != null)
                     {
-                        CreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
+                        OnCreateFillCell.Invoke(coordinatePoint, colorRectangle, saveCell);
                     }
                 }
 
@@ -132,18 +132,18 @@ namespace ImageEditor
         private void SaveCoordinate(Point cell)
         {
             _arrayCells[cell.X, cell.Y] = true;
-            if(InformationOutput != null)
+            if(OnInformationOutput != null)
             {
-                InformationOutput.Invoke($"Save Cell: [{cell.X} : {cell.Y}];");
+                OnInformationOutput.Invoke($"Save Cell: [{cell.X} : {cell.Y}];");
             }
         }
 
         private void RemoveCoordinate(Point cell)
         {
             _arrayCells[cell.X, cell.Y] = false;
-            if (InformationOutput != null)
+            if (OnInformationOutput != null)
             {
-                InformationOutput.Invoke($"Remove Cell: [{cell.X} : {cell.Y}];");
+                OnInformationOutput.Invoke($"Remove Cell: [{cell.X} : {cell.Y}];");
             }
         }
 
@@ -309,14 +309,14 @@ namespace ImageEditor
                 _graphics.DrawLine(pen, Zero, stepRows, maximumWidthOfColumns, stepRows);
             }
 
-            if(CreateNewGrid != null)
+            if(OnCreateNewGrid != null)
             {
-                CreateNewGrid.Invoke(columns, rows, _cellSize);
+                OnCreateNewGrid.Invoke(columns, rows, _cellSize);
             }
 
-            if(CreateNewGridAdditionalAction != null)
+            if(OnCreateNewGridAdditionalAction != null)
             {
-                CreateNewGridAdditionalAction.Invoke();
+                OnCreateNewGridAdditionalAction.Invoke();
             }
 
             _pictureForDraw.Image = _bitmap;
@@ -356,6 +356,8 @@ namespace ImageEditor
             }
 
             CopyArrayCells(arrayCells);
+            _saveCell = SaveCell.NotSave;
+            _previousFillCell = new Point(InvalidCoordinate, InvalidCoordinate);
         }
 
         private void CopyArrayCells(bool[,] arrayCells)

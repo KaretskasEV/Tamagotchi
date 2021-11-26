@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace ImageEditor
 {
@@ -9,23 +8,6 @@ namespace ImageEditor
         private const int ResetValue = -1;
         private static int _numberString = ResetValue;
         private static TextBox _textBoxImageInformation;
-        private static ImageOutput _imageOutputPictureBox;
-        //private static List<string> HistoryAction = new List<string>();
-
-        public static ImageOutput ImageOutputPicture
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _imageOutputPictureBox = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
 
         public static TextBox TextBoxImageInformation
         {
@@ -57,7 +39,6 @@ namespace ImageEditor
             _numberString++;
 
             string stringOfInformation = Convert.ToString(_numberString) + ". " + text + "\r\n";
-            //HistoryAction.Add(stringOfInformation);
 
             _textBoxImageInformation.Text = stringOfInformation + _textBoxImageInformation.Text;
         }
@@ -76,8 +57,10 @@ namespace ImageEditor
 
             int previousNumberString = _numberString - minusOneNumber;
 
-            if (previousNumberString == notPreviousString)
+            if(previousNumberString == notPreviousString)
             {
+                _numberString = notPreviousString;
+                ClearTextInTextBox();
                 return;
             }
 
@@ -92,8 +75,6 @@ namespace ImageEditor
             {
                 return;
             }
-
-            //HistoryAction.RemoveAt(_numberString);
 
             _numberString--;
         }

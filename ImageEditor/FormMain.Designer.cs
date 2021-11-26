@@ -30,8 +30,8 @@ namespace ImageEditor
         private void InitializeComponent()
         {
             this.buttonCreateNewGrid = new System.Windows.Forms.Button();
-            this.openFileDialogFile = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialogFile = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.buttonSaveImage = new System.Windows.Forms.Button();
             this.buttonLoadImage = new System.Windows.Forms.Button();
             this.buttonUndo = new System.Windows.Forms.Button();
@@ -64,25 +64,24 @@ namespace ImageEditor
             this.buttonCreateNewGrid.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCreateNewGrid.Name = "buttonCreateNewGrid";
             this.buttonCreateNewGrid.Size = new System.Drawing.Size(138, 33);
-            this.buttonCreateNewGrid.TabIndex = 1;
+            this.buttonCreateNewGrid.TabIndex = 0;
             this.buttonCreateNewGrid.Text = "Create new grid";
             this.buttonCreateNewGrid.UseVisualStyleBackColor = true;
             this.buttonCreateNewGrid.Click += new System.EventHandler(this.ButtonCreateNewImage_Click);
             this.buttonCreateNewGrid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonCreateNewImage_MouseMove);
             // 
-            // openFileDialogFile
+            // openFileDialog
             // 
-            this.openFileDialogFile.DefaultExt = "txt";
-            this.openFileDialogFile.FileName = "openFileDialog1";
-            this.openFileDialogFile.Filter = "Текстовые файлы(*.txt)|*.txt";
-            this.openFileDialogFile.Title = "Open file";
+            this.openFileDialog.DefaultExt = "proto";
+            this.openFileDialog.Filter = "(*.proto)|*.proto";
+            this.openFileDialog.Title = "Open file";
             // 
-            // saveFileDialogFile
+            // saveFileDialog
             // 
-            this.saveFileDialogFile.CheckFileExists = true;
-            this.saveFileDialogFile.DefaultExt = "txt";
-            this.saveFileDialogFile.Filter = "Текстовые файлы(*.txt)|*.txt";
-            this.saveFileDialogFile.Title = "Save file";
+            this.saveFileDialog.DefaultExt = "proto";
+            this.saveFileDialog.FileName = "newFile";
+            this.saveFileDialog.Filter = "(*.proto)|*.proto";
+            this.saveFileDialog.Title = "Save file";
             // 
             // buttonSaveImage
             // 
@@ -90,9 +89,10 @@ namespace ImageEditor
             this.buttonSaveImage.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSaveImage.Name = "buttonSaveImage";
             this.buttonSaveImage.Size = new System.Drawing.Size(138, 33);
-            this.buttonSaveImage.TabIndex = 2;
+            this.buttonSaveImage.TabIndex = 7;
             this.buttonSaveImage.Text = "Save Image";
             this.buttonSaveImage.UseVisualStyleBackColor = true;
+            this.buttonSaveImage.Click += new System.EventHandler(this.ButtonSaveImage_Click);
             this.buttonSaveImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonSaveImage_MouseMove);
             // 
             // buttonLoadImage
@@ -101,10 +101,10 @@ namespace ImageEditor
             this.buttonLoadImage.Margin = new System.Windows.Forms.Padding(4);
             this.buttonLoadImage.Name = "buttonLoadImage";
             this.buttonLoadImage.Size = new System.Drawing.Size(138, 33);
-            this.buttonLoadImage.TabIndex = 3;
+            this.buttonLoadImage.TabIndex = 6;
             this.buttonLoadImage.Text = "Load Image";
             this.buttonLoadImage.UseVisualStyleBackColor = true;
-            this.buttonLoadImage.Click += new System.EventHandler(this.buttonLoadImage_Click);
+            this.buttonLoadImage.Click += new System.EventHandler(this.ButtonLoadImage_Click);
             this.buttonLoadImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonLoadImage_MouseMove);
             // 
             // buttonUndo
@@ -136,7 +136,7 @@ namespace ImageEditor
             0});
             this.numericUpDownColumns.Name = "numericUpDownColumns";
             this.numericUpDownColumns.Size = new System.Drawing.Size(76, 23);
-            this.numericUpDownColumns.TabIndex = 5;
+            this.numericUpDownColumns.TabIndex = 1;
             this.numericUpDownColumns.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDownColumns.Value = new decimal(new int[] {
             35,
@@ -162,7 +162,7 @@ namespace ImageEditor
             0});
             this.numericUpDownRows.Name = "numericUpDownRows";
             this.numericUpDownRows.Size = new System.Drawing.Size(76, 23);
-            this.numericUpDownRows.TabIndex = 6;
+            this.numericUpDownRows.TabIndex = 2;
             this.numericUpDownRows.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDownRows.Value = new decimal(new int[] {
             17,
@@ -232,10 +232,10 @@ namespace ImageEditor
             this.buttonRedo.Location = new System.Drawing.Point(87, 27);
             this.buttonRedo.Name = "buttonRedo";
             this.buttonRedo.Size = new System.Drawing.Size(62, 33);
-            this.buttonRedo.TabIndex = 9;
+            this.buttonRedo.TabIndex = 5;
             this.buttonRedo.Text = "Redo";
             this.buttonRedo.UseVisualStyleBackColor = true;
-            this.buttonRedo.Click += new System.EventHandler(this.buttonRedo_Click);
+            this.buttonRedo.Click += new System.EventHandler(this.ButtonRedo_Click);
             this.buttonRedo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ButtonRedo_MouseMove);
             // 
             // buttonClear
@@ -243,7 +243,7 @@ namespace ImageEditor
             this.buttonClear.Location = new System.Drawing.Point(7, 72);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(142, 33);
-            this.buttonClear.TabIndex = 10;
+            this.buttonClear.TabIndex = 3;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.ButtonClear_Click);
@@ -270,6 +270,7 @@ namespace ImageEditor
             this.textBoxImageInformation.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxImageInformation.Size = new System.Drawing.Size(266, 76);
             this.textBoxImageInformation.TabIndex = 10;
+            this.textBoxImageInformation.TabStop = false;
             this.textBoxImageInformation.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TextBoxImageInformation_MouseMove);
             // 
             // groupBoxForFile
@@ -342,8 +343,8 @@ namespace ImageEditor
         }
 
         #endregion
-        private System.Windows.Forms.OpenFileDialog openFileDialogFile;
-        private System.Windows.Forms.SaveFileDialog saveFileDialogFile;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Button buttonCreateNewGrid;
         private System.Windows.Forms.Button buttonSaveImage;
         private System.Windows.Forms.Button buttonLoadImage;

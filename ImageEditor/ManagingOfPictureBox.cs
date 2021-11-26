@@ -6,12 +6,9 @@ namespace ImageEditor
 {
     public static class ManagingOfPictureBox
     {
-
         private static bool _pressButtonMouse;
         private static ImageOutput _imageOutputPictureBox;
         private static PictureBox _pictureBoxImange;
-
-        public static event Action ModifiedOfPicture;
 
         public static ImageOutput ImageOutputPicture
         {
@@ -45,24 +42,19 @@ namespace ImageEditor
             }
         }
 
-        private static void ModifiedTrue()
+        public static void ShowAllFillCells(bool[,] arrayCells)
         {
-            if(ModifiedOfPicture != null)
-            {
-                ModifiedOfPicture.Invoke();
-            }
+            _imageOutputPictureBox.ShowAllFillCells(Color.Black, arrayCells);
         }
 
         public static void CreateNewGridInPictureBox(int columns, int rows)
         {
             _imageOutputPictureBox.CreateGrid(columns, rows, Color.Black);
-            ModifiedTrue();
         }
 
         public static void ClearGridInPictureBox()
         {
             _imageOutputPictureBox.ClearGrid(Color.White);
-            ModifiedTrue();
         }
 
         public static void MouseMoveInPictureBox(MouseEventArgs mouseEventArgs)
@@ -89,12 +81,10 @@ namespace ImageEditor
             if (MouseButtons.Left == mouseEventArgs.Button)
             {
                 _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.Black, ImageOutput.SaveCell.Save);
-                ModifiedTrue();
             }
             else if (MouseButtons.Right == mouseEventArgs.Button)
             {
                 _imageOutputPictureBox.CreateSquareFillCell(mouseEventArgs.Location, Color.White, ImageOutput.SaveCell.Remove);
-                ModifiedTrue();
             }
         }
 
@@ -156,7 +146,7 @@ namespace ImageEditor
         {
             if (ManagingOfButtons.UndoIsPress == false)
             {
-                HistoryOfDraw.CreateSquareFillCell(coordinatePoint, colorRectangle, saveCell);
+                HistoryOfDraw.UndoCreateSquareFillCell(coordinatePoint, colorRectangle, saveCell);
             }
         }
     }
