@@ -56,6 +56,7 @@ namespace ImageEditor
             MaximumNumberOfColumns = MaximumColumns;
             MaximumNumberOfRows = MaximumRows;
             _saveCell = SaveCell.NotSave;
+            _arrayCells = new bool[MaximumColumns, MaximumRows];
         }
 
         public bool[,] ArrayCells { get => _arrayCells; }
@@ -73,7 +74,7 @@ namespace ImageEditor
             GC.SuppressFinalize(this);
         }
 
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -280,12 +281,14 @@ namespace ImageEditor
             const int firstDimensionOfArray = 0;
             const int secondDimensionOfArray = 1;
             const int widthPen = 1;
+            const int firstColumnOfRow = 1;
 
             if ((columns > MaximumNumberOfColumns & columns < minimumNumberOfColumnsOrRows) |
                 (rows > MaximumNumberOfRows & rows < minimumNumberOfColumnsOrRows))
             {
-                MessageBox.Show(@"Columns must be from 1 to 35. Rows must be from 1 to 17", @"Error!!!");
-                return;
+                throw new Exception($"Columns must be from { firstColumnOfRow } to " +
+                    $"{MaximumNumberOfColumns}. Rows must be from {firstColumnOfRow} " +
+                    $"to {MaximumNumberOfRows}");
             }
 
             _arrayCells = new bool[columns, rows];

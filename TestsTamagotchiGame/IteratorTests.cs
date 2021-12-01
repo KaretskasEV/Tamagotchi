@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+
 using TamagotchiGame;
 
 namespace TestsTamagotchiGame
@@ -7,7 +8,7 @@ namespace TestsTamagotchiGame
     sealed class IteratorTests
     {
         [Test]
-        public void Reset_Throw_IndexOutOfRangeException_InCurrent()
+        public void Reset_Throw_IndexOutOfRangeException_In_Current()
         {
             int[] arrayInts = {0, 1, 2};
             var iteratorArrayInts = new Iterator<int>(arrayInts);

@@ -20,7 +20,7 @@ namespace ImageEditor
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException("NumericUpDownColumns = null");
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace ImageEditor
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new NullReferenceException("NumericUpDownRows = null");
                 }
             }
         }
@@ -50,7 +50,14 @@ namespace ImageEditor
             {
                 if (value.GetTypeCode() == TypeCode.Int32)
                 {
-                    _numericUpDownColumns.Value = value;
+                    try
+                    {
+                        _numericUpDownColumns.Value = value;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        throw new ArgumentOutOfRangeException("The number is out of range."); 
+                    }
                 }
                 else
                 {
@@ -67,7 +74,14 @@ namespace ImageEditor
             {
                 if (value.GetTypeCode() == TypeCode.Int32)
                 {
-                    _numericUpDownRows.Value = value;
+                    try
+                    {
+                        _numericUpDownRows.Value = value;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        throw new ArgumentOutOfRangeException("The number is out of range.");
+                    }
                 }
                 else
                 {

@@ -2,7 +2,7 @@
 
 namespace ImageEditor
 {
-    public static class Transoformation
+    public static class ArrayTransoformation
     {
         const int firstDimensionOfArray = 0;
         const int secondDimensionOfArray = 1;

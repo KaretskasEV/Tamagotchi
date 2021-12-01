@@ -71,7 +71,7 @@ namespace ImageEditor
             if (_buttonUndoIsPress == false)
             {
                 HistoryOfDraw.UndoClearImage(_imageOutputPictureBox.ArrayCells);
-                ManagingOfTextBox.WriteTextInTextBox($"Clear the grid.");
+                ManagingOfTextBox.WriteTextInTextBox($"Clear the grid;");
             }
 
             ManagingOfPictureBox.ClearGridInPictureBox();
@@ -87,7 +87,7 @@ namespace ImageEditor
             {
                 HistoryOfDraw.UndoCreateNewGrid(_imageOutputPictureBox.CurrentMaximumColumns + oneColumnOrRow,
                                             _imageOutputPictureBox.CurrentMaximumRows + oneColumnOrRow, array);
-                ManagingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} x {rows}");
+                ManagingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} x {rows};");
             }
 
             ManagingOfNumericUpDown.Columns = columns;
@@ -166,7 +166,7 @@ namespace ImageEditor
 
         public static void SaveImage(bool[,] arrayCells)
         {
-            SerializeInFile.SaveFile(arrayCells);
+            SerializeOfArrayInFile.SaveFile(arrayCells);
         }
 
         public static void LoadImage()
@@ -175,7 +175,7 @@ namespace ImageEditor
             const int secondDimensionOfArray = 1;
             int columns, rows;
 
-            bool[,] arrayCells = SerializeInFile.ReadFile();
+            bool[,] arrayCells = SerializeOfArrayInFile.ReadFile();
 
             if(arrayCells == null)
             {
@@ -191,6 +191,7 @@ namespace ImageEditor
             RedoEnableFalse();
             HistoryOfDraw.UndoClearStack();
             UndoEnableFalse();
+            ManagingOfTextBox.ClearTextInTextBox();
 
             ManagingOfPictureBox.ShowAllFillCells(arrayCells);
         }

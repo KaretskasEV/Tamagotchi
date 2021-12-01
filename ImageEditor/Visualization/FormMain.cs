@@ -27,8 +27,8 @@ namespace ImageEditor
             ManagingOfTextBox.TextBoxImageInformation = textBoxImageInformation;
             ManagingOfButtons.ButtonUndo = buttonUndo;
             ManagingOfButtons.ButtonRedo = buttonRedo;
-            SerializeInFile.OpenFileDialog = openFileDialog;
-            SerializeInFile.SaveFileDialog = saveFileDialog;
+            SerializeOfArrayInFile.OpenFileDialog = openFileDialog;
+            SerializeOfArrayInFile.SaveFileDialog = saveFileDialog;
 
             _imageOutput.OnCreateFillCell += ManagingOfPictureBox.SaveInStack;
             _imageOutput.OnInformationOutput += ManagingOfTextBox.CheckForRecord;
@@ -39,6 +39,8 @@ namespace ImageEditor
             int columns = (int)numericUpDownColumns.Value;
             int rows = (int) numericUpDownRows.Value;
             ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
+
+            LogFile.CreateFileLog("Log_File.txt");
         }
 
         private void NumericUpDownRows_ValueChanged(object sender, EventArgs e)

@@ -6,8 +6,15 @@ namespace ImageEditor
     public static class ManagingOfTextBox
     {
         private const int ResetValue = -1;
+
         private static int _numberString = ResetValue;
         private static TextBox _textBoxImageInformation;
+        private static readonly string[] _arrayAllOperation = new string[100];
+
+        public static string[] ArrayHistory
+        {
+            get { return _arrayAllOperation; }
+        }
 
         public static TextBox TextBoxImageInformation
         {
@@ -38,22 +45,29 @@ namespace ImageEditor
 
             _numberString++;
 
-            string stringOfInformation = Convert.ToString(_numberString) + ". " + text + "\r\n";
+            string stringOfInformation = Convert.ToString(_numberString) + ". " + text;
 
-            _textBoxImageInformation.Text = stringOfInformation + _textBoxImageInformation.Text;
+            LogFile.CreateMessageToSave("Action", stringOfInformation, LogFile.DataProstration.NotSaveQuickly);
+
+            _textBoxImageInformation.Text = stringOfInformation + "\r\n" + _textBoxImageInformation.Text;
         }
 
-        public static void DeleteLastStringOfTextBox()
+        public static void DeleteLastStringOfTextBox() 
         {
+            const int notFindString = -1;
+            const int notPreviousString = -1;
+            const int minusOneNumber = 1;
+            const int startIndexText = 0;
+            
             if (_textBoxImageInformation == null)
             {
                 throw new NullReferenceException();
             }
 
-            const int notFindString = -1;
-            const int notPreviousString = -1;
-            const int minusOneNumber = 1;
-            const int startIndexText = 0;
+            string text = _textBoxImageInformation.Text;
+            int endString = text.IndexOf("\r\n", StringComparison.CurrentCulture);
+            text = text.Remove(endString, text.Length - endString);
+            LogFile.CreateMessageToSave("Cancel", text, LogFile.DataProstration.NotSaveQuickly);
 
             int previousNumberString = _numberString - minusOneNumber;
 

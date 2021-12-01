@@ -72,6 +72,11 @@ namespace ImageEditor
 
         public static void UndoClearImage(bool[,] arrayCells)
         {
+            if(arrayCells == null)
+            {
+                return;
+            }
+
             Action writeAction = () =>
             {
                 RedoClearImage();
@@ -86,6 +91,11 @@ namespace ImageEditor
 
         public static void UndoCreateNewGrid(int columns, int rows, bool[,] arrayCells)
         {
+            if (arrayCells == null)
+            {
+                return;
+            }
+
             Action writeAction = () =>
             {
                 const int oneColumnOrRow = 1;
