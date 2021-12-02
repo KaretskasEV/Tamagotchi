@@ -9,12 +9,6 @@ namespace ImageEditor
 
         private static int _numberString = ResetValue;
         private static TextBox _textBoxImageInformation;
-        private static readonly string[] _arrayAllOperation = new string[100];
-
-        public static string[] ArrayHistory
-        {
-            get { return _arrayAllOperation; }
-        }
 
         public static TextBox TextBoxImageInformation
         {
@@ -47,7 +41,7 @@ namespace ImageEditor
 
             string stringOfInformation = Convert.ToString(_numberString) + ". " + text;
 
-            LogFile.CreateMessageToSave("Action", stringOfInformation, LogFile.DataProstration.NotSaveQuickly);
+            LogFile.CreateMessageToSave("Action", stringOfInformation, LogFile.DataRetention.NotSaveQuickly);
 
             _textBoxImageInformation.Text = stringOfInformation + "\r\n" + _textBoxImageInformation.Text;
         }
@@ -67,7 +61,7 @@ namespace ImageEditor
             string text = _textBoxImageInformation.Text;
             int endString = text.IndexOf("\r\n", StringComparison.CurrentCulture);
             text = text.Remove(endString, text.Length - endString);
-            LogFile.CreateMessageToSave("Cancel", text, LogFile.DataProstration.NotSaveQuickly);
+            LogFile.CreateMessageToSave("Cancel", text, LogFile.DataRetention.NotSaveQuickly);
 
             int previousNumberString = _numberString - minusOneNumber;
 

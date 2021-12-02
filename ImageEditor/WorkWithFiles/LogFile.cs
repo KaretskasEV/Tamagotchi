@@ -6,12 +6,13 @@ namespace ImageEditor
 {
     public static class LogFile
     {
-        public enum DataProstration { SaveQuickly, NotSaveQuickly }
+        private const int ResetValue = -1;
+        public enum DataRetention { SaveQuickly, NotSaveQuickly }
 
         private static readonly string[] _arrayLog = new string[100];
         private static string _path;
-        private static int _itemOperation;
-        private static int _itemArrayLog;
+        private static int _itemOperation = ResetValue;
+        private static int _itemArrayLog = ResetValue;
 
         public static void CreateFileLog(string fileName)
         {
@@ -144,13 +145,13 @@ namespace ImageEditor
             }
         }
 
-        public static void CreateMessageToSave(string typeOfTransaction, string text, DataProstration dataProstration)
+        public static void CreateMessageToSave(string typeOfTransaction, string text, DataRetention dataProstration)
         {
             const int maximumNumberOfEntries = 100;
             const int resetCount = 0;
             const int maximumCharactersInString = 15;
 
-            string stringItemOperation;
+            string stringItemOperation, stringDateTime;
 
             if(text == null)
             {
@@ -177,17 +178,30 @@ namespace ImageEditor
                 _itemArrayLog = resetCount;
                 SaveFile(_path, _arrayLog);
             }
-
-            stringItemOperation = _itemOperation.ToString();
+            
+            stringDateTime = $"[{DateTime.Now}]--";
+            stringItemOperation = _itemOperation.ToString() + ")";
             stringItemOperation = stringItemOperation.PadRight(maximumCharactersInString, '-');
             typeOfTransaction = typeOfTransaction.PadRight(maximumCharactersInString, '-');
 
-            _arrayLog[_itemArrayLog] = stringItemOperation + typeOfTransaction + text;
+            _arrayLog[_itemArrayLog] = stringItemOperation + stringDateTime + typeOfTransaction + text;
 
-            if(dataProstration == DataProstration.SaveQuickly)
+            if(dataProstration == DataRetention.SaveQuickly)
             {
                 SaveFile(_path, _arrayLog);
             }
+        }
+
+        public static void CreateMessageToError(Exception objectError)
+        {
+            string errorMessage;
+
+            errorMessage = "\r\nSource: " + objectError.Source + "\r\n";
+            errorMessage += "Message: " + objectError.Message + "\r\n";
+            errorMessage += "StackTrace: " + objectError.StackTrace + "\r\n";
+            errorMessage += "TargetSite: " + objectError.TargetSite + "\r\n";
+
+            CreateMessageToSave("ERROR", errorMessage, DataRetention.SaveQuickly);
         }
     }
 }
