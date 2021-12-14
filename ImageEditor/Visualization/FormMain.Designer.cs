@@ -327,6 +327,7 @@ namespace ImageEditor
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Image Editor";
             this.Deactivate += new System.EventHandler(this.FormMain_Deactivate);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormMain_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownColumns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRows)).EndInit();

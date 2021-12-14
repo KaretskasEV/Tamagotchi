@@ -1,84 +1,134 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace ImageEditor
 {
     public partial class FormMain : Form
     {
+        private readonly SerializeOfArray _serializeOfArray;
+        private readonly DeserializeOfArray _deserializeOfArray;
+        private readonly ManagingOfNumericUpDown _managingOfNumericUpDown;
+        private readonly ManagingOfPictureBox _managingOfPictureBox;
+        private readonly ManagingOfButtons _managingOfButtons;
+        private readonly ManagingOfTextBox _managingOfTextBox;
+        private readonly Undo _undo;
+        private readonly Redo _redo;
         private readonly ImageOutput _imageOutput;
+
+        public SerializeOfArray SerializeOfArray { get => _serializeOfArray; }
+        public DeserializeOfArray DeserializeOfArray { get => _deserializeOfArray; }
+        public ManagingOfNumericUpDown ManagingOfNumericUpDown { get => _managingOfNumericUpDown; }
+        public ManagingOfPictureBox ManagingPictureBox { get => _managingOfPictureBox; }
+        public ManagingOfButtons ManagingOfButtons { get => _managingOfButtons; }
+        public ManagingOfTextBox ManagingOfTextBox { get => _managingOfTextBox; }
+        public Undo Undo { get => _undo; }
+        public Redo Redo { get => _redo; }
+        public ImageOutput ImageOutput { get => _imageOutput; }
+
         
+        public PictureBox PictureBoxImage { get => pictureBoxImage; }
+        public TextBox TextBoxImageInformation { get => textBoxImageInformation;}
+        public NumericUpDown NumericUpDownColumns { get => numericUpDownColumns; }
+        public NumericUpDown NumericUpDownRows { get => numericUpDownRows; }
+        public OpenFileDialog OpenFileDialog { get => openFileDialog; }
+        public SaveFileDialog SaveFileDialog { get => saveFileDialog; }
+        public Button ButtonCreateNewGrid { get => buttonCreateNewGrid; }
+        public Button ButtonLoadImage { get => buttonLoadImage; }
+        public Button ButtonSaveImage { get => buttonSaveImage; }
+        public Button ButtonClear { get => buttonClear; }
+        public Button ButtonUndo { get => buttonUndo; }
+        public Button ButtonRedo { get => buttonRedo;}
 
         public FormMain()
         {
-            const int SizeCell = 21;
             const int MaximumColumns = 35;
             const int MaximunRows = 17;
+            const int SizeCell = 21;
 
             InitializeComponent();
 
+            string dateTime = DateTime.Now.ToString("dd.MM.yyyy%-HH%.mm%.ss");
+            LogFile.CreateFileLog($"Log_File-{dateTime}.txt");
+
             _imageOutput = new ImageOutput(pictureBoxImage, SizeCell, MaximumColumns, MaximunRows);
-            ManagingOfPictureBox.ImageOutputPicture = _imageOutput;
-            ManagingOfButtons.ImageOutputPicture = _imageOutput;
-            HistoryOfDraw.ImageOutputPicture = _imageOutput;
+            _serializeOfArray = new SerializeOfArray(this);
+            _deserializeOfArray = new DeserializeOfArray(this);
+            _managingOfNumericUpDown = new ManagingOfNumericUpDown(this);
+            _managingOfPictureBox = new ManagingOfPictureBox(this);
+            _managingOfTextBox = new ManagingOfTextBox(this);
+            _redo = new Redo(this);
+            _undo = new Undo(this);
+            _managingOfButtons = new ManagingOfButtons(this);
 
-            ManagingOfPictureBox.PictureBoxImage = pictureBoxImage;
-            ManagingOfNumericUpDown.NumericUpDownColumns = numericUpDownColumns;
-            ManagingOfNumericUpDown.NumericUpDownRows = numericUpDownRows;
-            ManagingOfTextBox.TextBoxImageInformation = textBoxImageInformation;
-            ManagingOfButtons.ButtonUndo = buttonUndo;
-            ManagingOfButtons.ButtonRedo = buttonRedo;
-            SerializeOfArrayInFile.OpenFileDialog = openFileDialog;
-            SerializeOfArrayInFile.SaveFileDialog = saveFileDialog;
+            _imageOutput.OnCreateNewGrid += _managingOfPictureBox.ChangeSizePictureBox;
+            _imageOutput.OnCreateNewGridAdditionalAction += _managingOfPictureBox.ShowPictureBoxInTheCentreGroupBox;
+            _redo.OnClearImage += _undo.UndoClearImage;
+            _redo.OnCreateNewGrid += _undo.UndoCreateNewGrid;
+            _undo.OnUndoStackEmpty += _managingOfButtons.UndoEnableTrue;
+            _undo.OnChangeOfPicture += () =>
+            {
+                if(_managingOfButtons.RedoIsPress == false)
+                {
+                    _managingOfButtons.RedoEnableFalse();
+                }
+            };
+            _imageOutput.OnCreateFillCell += (Point coordinatePoint, Color colorRectangle, ImageOutput.SaveCell saveCell) =>
+            {
+                if (_managingOfButtons.UndoIsPress == false)
+                {
+                    _undo.UndoCreateSquareFillCell(coordinatePoint, colorRectangle, saveCell);
+                }
+            };
+            _imageOutput.OnInformationOutput += (string text) =>
+            {
+                if(_managingOfButtons.UndoIsPress == false)
+                {
+                    _managingOfTextBox.WriteTextInTextBox(text);
+                }
+            };
 
-            _imageOutput.OnCreateFillCell += ManagingOfPictureBox.SaveInStack;
-            _imageOutput.OnInformationOutput += ManagingOfTextBox.CheckForRecord;
-            _imageOutput.OnCreateNewGrid += ManagingOfPictureBox.ChangeSizePictureBox;
-            _imageOutput.OnCreateNewGridAdditionalAction += ManagingOfPictureBox.ShowPictureBoxInTheCentreGroupBox;
-            HistoryOfDraw.OnChangeOfPicture += ManagingOfButtons.RedoEnableFalse;
-
-            int columns = (int)numericUpDownColumns.Value;
+            int columns = (int) numericUpDownColumns.Value;
             int rows = (int) numericUpDownRows.Value;
-            ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
-
-            LogFile.CreateFileLog("Log_File.txt");
+            _managingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
         }
 
         private void NumericUpDownRows_ValueChanged(object sender, EventArgs e)
         {
-            ManagingOfNumericUpDown.Rows = (int)numericUpDownRows.Value;
+            _managingOfNumericUpDown.Rows = (int) numericUpDownRows.Value;
         }
 
         private void NumericUpDownColumns_ValueChanged(object sender, EventArgs e)
         {
-            ManagingOfNumericUpDown.Columns = (int)numericUpDownColumns.Value;
+            _managingOfNumericUpDown.Columns = (int) numericUpDownColumns.Value;
         }
 
         private void PictureBoxImage_MouseMove(object sender, MouseEventArgs e)
         {
-            ManagingOfPictureBox.MouseMoveInPictureBox(e);
+            _managingOfPictureBox.MouseMoveInPictureBox(e);
         }
 
         private void PictureBoxImage_MouseDown(object sender, MouseEventArgs e)
         {
-            ManagingOfPictureBox.MouseDownInPictureBox(e);
+            _managingOfPictureBox.MouseDownInPictureBox(e);
         }
 
         private void PictureBoxImage_MouseUp(object sender, MouseEventArgs e)
         {
-            ManagingOfPictureBox.MouseUpInPictureBox(false);
+            _managingOfPictureBox.MouseUpInPictureBox(false);
         }
 
         private void ButtonClear_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.ClearImage();
+            _managingOfButtons.ClearImage();
         }
 
         private void ButtonCreateNewImage_Click(object sender, EventArgs e)
         {
-            int columns = ManagingOfNumericUpDown.Columns;
-            int rows = ManagingOfNumericUpDown.Rows;
+            int columns = _managingOfNumericUpDown.Columns;
+            int rows = _managingOfNumericUpDown.Rows;
 
-            ManagingOfButtons.CreateNewGrid(columns, rows);
+            _managingOfButtons.CreateNewGrid(columns, rows);
         }
 
         private void GroupBoxForImage_MouseMove(object sender, MouseEventArgs e)
@@ -173,21 +223,26 @@ namespace ImageEditor
 
         private void ButtonUndo_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.UndoAction();
+            _managingOfButtons.UndoAction();
         }
 
         private void ButtonRedo_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.RedoAction();
+            _managingOfButtons.RedoAction();
         }
         private void ButtonSaveImage_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.SaveImage(_imageOutput.ArrayCells);
+            _managingOfButtons.SaveImage(_imageOutput.ArrayCells);
         }
 
         private void ButtonLoadImage_Click(object sender, EventArgs e)
         {
-            ManagingOfButtons.LoadImage();
+            _managingOfButtons.LoadImage();
+        }
+
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            LogFile.SaveSimpleMessage("Action", "Application is closed.", LogFile.DataRetention.SaveQuickly);
         }
     }
 }

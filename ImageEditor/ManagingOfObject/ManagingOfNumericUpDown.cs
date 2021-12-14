@@ -3,89 +3,111 @@ using System.Windows.Forms;
 
 namespace ImageEditor
 {
-    public static class ManagingOfNumericUpDown
+    sealed public class ManagingOfNumericUpDown
     {
-        private static NumericUpDown _numericUpDownColumns;
-        private static NumericUpDown _numericUpDownRows;
+        private readonly NumericUpDown _numericUpDownColumns;
+        private readonly NumericUpDown _numericUpDownRows;
 
-        public static NumericUpDown NumericUpDownColumns
+        public ManagingOfNumericUpDown(FormMain formMain)
         {
-            get => _numericUpDownColumns;
-
-            set
+            try
             {
-                if (value != null)
+                if (formMain == null)
                 {
-                    _numericUpDownColumns = value;
+                    throw new NullReferenceException("formMain is null.");
                 }
-                else
-                {
-                    throw new NullReferenceException("NumericUpDownColumns = null");
-                }
+
+                _numericUpDownColumns = formMain.NumericUpDownColumns;
+                _numericUpDownRows = formMain.NumericUpDownRows;
+            }
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
             }
         }
 
-        public static NumericUpDown NumericUpDownRows
+        public int Columns
         {
-            get => _numericUpDownRows;
-
-            set
+            get
             {
-                if (value != null)
+                int number = 1;
+
+                try
                 {
-                    _numericUpDownRows = value;
+                    number = (int)_numericUpDownColumns.Value;
                 }
-                else
+                catch (NullReferenceException error)
                 {
-                    throw new NullReferenceException("NumericUpDownRows = null");
+                    LogFile.SaveErrorMessage(error);
                 }
+
+                return number;
             }
-        }
-
-        public static int Columns
-        {
-            get => (int)_numericUpDownColumns.Value;
 
             set
             {
-                if (value.GetTypeCode() == TypeCode.Int32)
+                try
                 {
-                    try
+                    if (value.GetTypeCode() == TypeCode.Int32)
                     {
                         _numericUpDownColumns.Value = value;
                     }
-                    catch (ArgumentOutOfRangeException)
+                    else
                     {
-                        throw new ArgumentOutOfRangeException("The number is out of range."); 
+                        throw new Exception("The assigned value is less than the Minimum property value.\r\n " +
+                                            "- or - The assigned value is greater than the Maximum property value.");
                     }
                 }
-                else
+                catch (ArgumentOutOfRangeException error)
                 {
-                    MessageBox.Show(@"Type isn't int.", @"Error!!!");
+                    LogFile.SaveErrorMessage(error);
+                }
+                catch (Exception error)
+                {
+                    LogFile.SaveErrorMessage(error);
                 }
             }
         }
 
-        public static int Rows
+        public int Rows
         {
-            get => (int)_numericUpDownRows.Value;
+            get
+            {
+                int number = 1;
+
+                try
+                {
+                    number = (int)_numericUpDownRows.Value;
+                }
+                catch (NullReferenceException error)
+                {
+                    LogFile.SaveErrorMessage(error);
+                }
+
+                return number;
+            }
 
             set
             {
-                if (value.GetTypeCode() == TypeCode.Int32)
+                try
                 {
-                    try
+                    if (value.GetTypeCode() == TypeCode.Int32)
                     {
                         _numericUpDownRows.Value = value;
                     }
-                    catch (ArgumentOutOfRangeException)
+                    else
                     {
-                        throw new ArgumentOutOfRangeException("The number is out of range.");
+                        throw new Exception("The assigned value is less than the Minimum property value.\r\n " +
+                                            "- or - The assigned value is greater than the Maximum property value.");
                     }
                 }
-                else
+                catch (ArgumentOutOfRangeException error)
                 {
-                    MessageBox.Show(@"Type isn't int.", @"Error!!!");
+                    LogFile.SaveErrorMessage(error);
+                }
+                catch (Exception error)
+                {
+                    LogFile.SaveErrorMessage(error);
                 }
             }
         }

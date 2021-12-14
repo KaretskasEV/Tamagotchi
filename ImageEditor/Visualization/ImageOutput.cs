@@ -8,6 +8,7 @@ namespace ImageEditor
     public sealed class ImageOutput: IDisposable
     {
         public enum SaveCell { Save, NotSave, Remove }
+
         public event Action<Point, Color, SaveCell> OnCreateFillCell;
         public event Action<string> OnInformationOutput;
         public event Action<int, int, int> OnCreateNewGrid;

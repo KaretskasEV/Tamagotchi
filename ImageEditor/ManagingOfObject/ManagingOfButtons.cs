@@ -3,118 +3,119 @@ using System.Windows.Forms;
 
 namespace ImageEditor
 {
-    public static class ManagingOfButtons
+    sealed public class ManagingOfButtons
     {
-        private static Button _buttonUndo;
-        private static Button _buttonRedo;
-        private static bool _buttonUndoIsPress;
-        private static bool _buttonRedoIsPress;
-        private static ImageOutput _imageOutputPictureBox;
+        private readonly SerializeOfArray _serializeOfArray;
+        private readonly DeserializeOfArray _deserializeOfArray;
+        private readonly ManagingOfNumericUpDown _managingOfNumericUpDown; 
+        private readonly ManagingOfPictureBox _managingOfPictureBox;
+        private readonly ManagingOfTextBox _managingOfTextBox;
+        private readonly Undo _undo;
+        private readonly Redo _redo;
+        private readonly ImageOutput _imageOutput;
+        private readonly Button _buttonUndo;
+        private readonly Button _buttonRedo;
 
-        public static bool UndoIsPress
+        private bool _buttonUndoIsPress;
+        private bool _buttonRedoIsPress;
+
+        public bool UndoIsPress
         {
             get => _buttonUndoIsPress;
         }
 
-        public static bool RedoIsPress
+        public bool RedoIsPress
         {
             get => _buttonRedoIsPress;
         }
 
-        public static ImageOutput ImageOutputPicture
+        public ManagingOfButtons(FormMain formMain)
         {
-            set
+            try
             {
-                if (value != null)
+                if (formMain == null)
                 {
-                    _imageOutputPictureBox = value;
+                    throw new NullReferenceException("formMain is null.");
                 }
-                else
-                {
-                    throw new NullReferenceException();
-                }
+
+                _serializeOfArray = formMain.SerializeOfArray;
+                _deserializeOfArray = formMain.DeserializeOfArray;
+                _managingOfNumericUpDown = formMain.ManagingOfNumericUpDown;
+                _managingOfPictureBox = formMain.ManagingPictureBox;
+                _managingOfTextBox = formMain.ManagingOfTextBox;
+                _undo = formMain.Undo;
+                _redo = formMain.Redo;
+                _imageOutput = formMain.ImageOutput;
+                _buttonUndo = formMain.ButtonUndo;
+                _buttonRedo = formMain.ButtonRedo;
+            }
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
             }
         }
 
-        public static Button ButtonUndo
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonUndo = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
-        public static Button ButtonRedo
-        {
-            set
-            {
-                if (value != null)
-                {
-                    _buttonRedo = value;
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-        }
-
-        public static void ClearImage()
+        public void ClearImage()
         {
             if (_buttonUndoIsPress == false)
             {
-                HistoryOfDraw.UndoClearImage(_imageOutputPictureBox.ArrayCells);
-                ManagingOfTextBox.WriteTextInTextBox($"Clear the grid;");
+                _undo.UndoClearImage(_imageOutput.ArrayCells);
+                _managingOfTextBox.WriteTextInTextBox($"Clear the grid;");
             }
 
-            ManagingOfPictureBox.ClearGridInPictureBox();
+            _managingOfPictureBox.ClearGridInPictureBox();
         }
 
-        public static void CreateNewGrid(int columns, int rows)
+        public void CreateNewGrid(int columns, int rows)
         {
             const int oneColumnOrRow = 1;
 
-            bool[,] array = _imageOutputPictureBox.ArrayCells;
+            bool[,] array = _imageOutput.ArrayCells;
 
             if (_buttonUndoIsPress == false)
             {
-                HistoryOfDraw.UndoCreateNewGrid(_imageOutputPictureBox.CurrentMaximumColumns + oneColumnOrRow,
-                                            _imageOutputPictureBox.CurrentMaximumRows + oneColumnOrRow, array);
-                ManagingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} x {rows};");
+                _undo.UndoCreateNewGrid(_imageOutput.CurrentMaximumColumns + oneColumnOrRow,
+                                            _imageOutput.CurrentMaximumRows + oneColumnOrRow, array);
+                _managingOfTextBox.WriteTextInTextBox($"Create a new grid: {columns} x {rows};");
             }
 
-            ManagingOfNumericUpDown.Columns = columns;
-            ManagingOfNumericUpDown.Rows = rows;
-            ManagingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
+            _managingOfNumericUpDown.Columns = columns;
+            _managingOfNumericUpDown.Rows = rows;
+            _managingOfPictureBox.CreateNewGridInPictureBox(columns, rows);
         }
 
         private static void ButtonEnable(Button button, bool enabled)
         {
-            if (enabled)
+            try
             {
-                button.Enabled = true;
+                if (button == null)
+                {
+                    throw new NullReferenceException("button is null.");
+                }
+
+                if (enabled)
+                {
+                    button.Enabled = true;
+                }
+                else
+                {
+                    button.Enabled = false;
+                }
             }
-            else
+            catch (NullReferenceException error)
             {
-                button.Enabled = false;
+                LogFile.SaveErrorMessage(error);
             }
         }
 
-        public static void UndoAction()
+        public void UndoAction()
         {
             _buttonUndoIsPress = true;
 
-            HistoryOfDraw.UndoAction();
+            _undo.UndoAction();
             RedoEnableTrue();
 
-            if(HistoryOfDraw.StackUndoEmpty == false)
+            if(_undo.StackUndoEmpty == false)
             {
                 UndoEnableFalse();
             }
@@ -122,12 +123,12 @@ namespace ImageEditor
             _buttonUndoIsPress = false;
         }
 
-        public static void RedoAction()
+        public void RedoAction()
         {
             _buttonRedoIsPress = true;
-            HistoryOfDraw.RedoAction();
+            _redo.RedoAction();
 
-            if(HistoryOfDraw.StackRedoEmpty == false)
+            if(_redo.StackRedoEmpty == false)
             {
                 RedoEnableFalse();
             }
@@ -135,7 +136,7 @@ namespace ImageEditor
             _buttonRedoIsPress= false;
         }
 
-        public static void UndoEnableFalse()
+        public void UndoEnableFalse()
         {
             ButtonEnable(_buttonUndo, false);
             if (_buttonRedo.Enabled)
@@ -144,14 +145,14 @@ namespace ImageEditor
             }
         }
 
-        public static void UndoEnableTrue()
+        public void UndoEnableTrue()
         {
-            ButtonEnable (_buttonUndo, true);
+            ButtonEnable(_buttonUndo, true);
         }
 
-        public static void RedoEnableFalse()
+        public void RedoEnableFalse()
         {
-            HistoryOfDraw.RedoClearStack();
+            _redo.RedoClearStack();
             ButtonEnable(_buttonRedo, false);
             if (_buttonUndo.Enabled)
             {
@@ -159,41 +160,60 @@ namespace ImageEditor
             }
         }
 
-        public static void RedoEnableTrue()
+        public void RedoEnableTrue()
         {
             ButtonEnable(_buttonRedo, true);
         }
 
-        public static void SaveImage(bool[,] arrayCells)
+        public void SaveImage(bool[,] arrayCells)
         {
-            SerializeOfArrayInFile.SaveFile(arrayCells);
+            try
+            {
+                if (arrayCells == null)
+                {
+                    throw new NullReferenceException("arrayCells is null.");
+                }
+
+                _serializeOfArray.SaveFile(arrayCells);
+            }
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
+            }
         }
 
-        public static void LoadImage()
+        public void LoadImage()
         {
             const int firstDimensionOfArray = 0;
             const int secondDimensionOfArray = 1;
             int columns, rows;
 
-            bool[,] arrayCells = SerializeOfArrayInFile.ReadFile();
+            bool[,] arrayCells = _deserializeOfArray.ReadFile();
 
-            if(arrayCells == null)
+            try
             {
-                return;
+                if (arrayCells == null)
+                {
+                    throw new NullReferenceException("arrayCells is null.");
+                }
+
+                columns = arrayCells.GetLength(firstDimensionOfArray);
+                rows = arrayCells.GetLength(secondDimensionOfArray);
+
+                _managingOfTextBox.ClearTextInTextBox();
+                CreateNewGrid(columns, rows);
+
+                RedoEnableFalse();
+                _undo.UndoClearStack();
+                UndoEnableFalse();
+                _managingOfTextBox.ClearTextInTextBox();
+
+                _managingOfPictureBox.ShowAllFillCells(arrayCells);
             }
-
-            columns=arrayCells.GetLength(firstDimensionOfArray);
-            rows=arrayCells.GetLength(secondDimensionOfArray);
-
-            ManagingOfTextBox.ClearTextInTextBox();
-            CreateNewGrid(columns, rows);
-
-            RedoEnableFalse();
-            HistoryOfDraw.UndoClearStack();
-            UndoEnableFalse();
-            ManagingOfTextBox.ClearTextInTextBox();
-
-            ManagingOfPictureBox.ShowAllFillCells(arrayCells);
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
+            }
         }
     }
 }

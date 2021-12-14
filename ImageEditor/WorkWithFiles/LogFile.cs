@@ -6,26 +6,26 @@ namespace ImageEditor
 {
     public static class LogFile
     {
-        private const int ResetValue = -1;
         public enum DataRetention { SaveQuickly, NotSaveQuickly }
 
-        private static readonly string[] _arrayLog = new string[100];
+        private const int ResetValue = -1;
+        private const int maximumNumberOfEntries = 100;
+
+        private static readonly string[] _arrayLog = new string[maximumNumberOfEntries];
         private static string _path;
         private static int _itemOperation = ResetValue;
         private static int _itemArrayLog = ResetValue;
 
         public static void CreateFileLog(string fileName)
         {
-            const int stringIsNotFound = -1;
-
-            if((fileName == null) | (fileName == ""))
+            if((fileName == null) | (fileName == string.Empty))
             {
                 MessageBox.Show("FileName is null or empty.");
                 return;
             }
             else
             {
-                if(fileName.IndexOf(".txt") == stringIsNotFound)
+                if(!fileName.Contains(".txt", StringComparison.CurrentCulture))
                 {
                     MessageBox.Show("The string has no file extension.");
                     return;
@@ -38,7 +38,7 @@ namespace ImageEditor
             {
                 using (var createFile = new StreamWriter(File.Create(fileName)))
                 {
-                    createFile.WriteLine("--------------- Log File ---------------\r\n");
+                    createFile.WriteLine("----------------------------------- Log File -----------------------------------\r\n");
                     createFile.Close();
                 }
             }
@@ -90,7 +90,10 @@ namespace ImageEditor
                 {
                     for (int item = 0; item < text.Length; item++)
                     {
-                        saveOfText.WriteLine(text[item]);
+                        if(string.IsNullOrEmpty(text[item]) == false)
+                        {
+                            saveOfText.WriteLine(text[item]);
+                        }
                     }
 
                     saveOfText.Close();
@@ -145,9 +148,8 @@ namespace ImageEditor
             }
         }
 
-        public static void CreateMessageToSave(string typeOfTransaction, string text, DataRetention dataProstration)
+        public static void SaveSimpleMessage(string typeOfTransaction, string text, DataRetention dataProstration)
         {
-            const int maximumNumberOfEntries = 100;
             const int resetCount = 0;
             const int maximumCharactersInString = 15;
 
@@ -177,6 +179,7 @@ namespace ImageEditor
             {
                 _itemArrayLog = resetCount;
                 SaveFile(_path, _arrayLog);
+                Array.Clear(_arrayLog, resetCount, _arrayLog.Length);
             }
             
             stringDateTime = $"[{DateTime.Now}]--";
@@ -189,10 +192,11 @@ namespace ImageEditor
             if(dataProstration == DataRetention.SaveQuickly)
             {
                 SaveFile(_path, _arrayLog);
+                Array.Clear(_arrayLog, resetCount, _arrayLog.Length);
             }
         }
 
-        public static void CreateMessageToError(Exception objectError)
+        public static void SaveErrorMessage(Exception objectError)
         {
             string errorMessage;
 
@@ -201,7 +205,7 @@ namespace ImageEditor
             errorMessage += "StackTrace: " + objectError.StackTrace + "\r\n";
             errorMessage += "TargetSite: " + objectError.TargetSite + "\r\n";
 
-            CreateMessageToSave("ERROR", errorMessage, DataRetention.SaveQuickly);
+            SaveSimpleMessage("ERROR", errorMessage, DataRetention.SaveQuickly);
         }
     }
 }

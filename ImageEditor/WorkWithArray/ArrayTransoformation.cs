@@ -1,51 +1,80 @@
-﻿
+﻿using System;
 
 namespace ImageEditor
 {
     public static class ArrayTransoformation
     {
-        const int firstDimensionOfArray = 0;
-        const int secondDimensionOfArray = 1;
+        private const int FirstDimensionOfArray = 0;
+        private const int SecondDimensionOfArray = 1;
 
-        static private int firstDimension;
-        static private int secondDimension;
+        private static int _firstDimension;
+        private static int _secondDimension;
 
         public static Pixel[] ArrayInPixels(bool[,] array)
         {
             const int firstItem = 0;
-            firstDimension = array.GetLength(firstDimensionOfArray);
-            secondDimension = array.GetLength(secondDimensionOfArray);
-            Pixel[] pixels = new Pixel[firstDimension * secondDimension];
             int item = firstItem;
 
-            for(int itemFirstDimension = firstItem; itemFirstDimension < firstDimension; itemFirstDimension++)
+            try
             {
-                for(int itemSecondDimension = firstItem; itemSecondDimension < secondDimension; itemSecondDimension++)
+                if (array == null)
                 {
-                    pixels[item].X = itemFirstDimension;
-                    pixels[item].Y = itemSecondDimension;
-                    pixels[item].Value = array[itemFirstDimension, itemSecondDimension];
-                    item++;
+                    throw new NullReferenceException("array is null.");
                 }
+
+                _firstDimension = array.GetLength(FirstDimensionOfArray);
+                _secondDimension = array.GetLength(SecondDimensionOfArray);
+                Pixel[] pixels = new Pixel[_firstDimension * _secondDimension];
+
+                for (int item_firstDimension = firstItem; item_firstDimension < _firstDimension; item_firstDimension++)
+                {
+                    for (int item_secondDimension = firstItem; item_secondDimension < _secondDimension; item_secondDimension++)
+                    {
+                        pixels[item].X = item_firstDimension;
+                        pixels[item].Y = item_secondDimension;
+                        pixels[item].Value = array[item_firstDimension, item_secondDimension];
+                        item++;
+                    }
+                }
+
+                return pixels;
+            }
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
             }
 
-            return pixels;
+            return null;
         }
 
         public static bool[,] PixelsInArray(Pixel[] pixels)
         {
             const int oneItem = 1;
 
-            firstDimension = pixels[pixels.Length - oneItem].X;
-            secondDimension = pixels[pixels.Length - oneItem].Y;
-            bool[,] array = new bool[firstDimension + oneItem, secondDimension + oneItem];
-
-            foreach(Pixel pixel in pixels)
+            try
             {
-                array[pixel.X, pixel.Y] = pixel.Value;
+                if (pixels == null)
+                {
+                    throw new NullReferenceException("pixels is null.");
+                }
+
+                _firstDimension = pixels[pixels.Length - oneItem].X;
+                _secondDimension = pixels[pixels.Length - oneItem].Y;
+                bool[,] array = new bool[_firstDimension + oneItem, _secondDimension + oneItem];
+
+                foreach (Pixel pixel in pixels)
+                {
+                    array[pixel.X, pixel.Y] = pixel.Value;
+                }
+
+                return array;
+            }
+            catch (NullReferenceException error)
+            {
+                LogFile.SaveErrorMessage(error);
             }
 
-            return array;
+            return null;
         }
     }
 }
